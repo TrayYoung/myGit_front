@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from 'Login'
+import Login from '@/components/Login'
 import HomeStudent from "@/components/HomeStudent";
 import HomeTeacher from "@/components/HomeTeacher";
 import HomeEmp from "@/components/HomeEmp";

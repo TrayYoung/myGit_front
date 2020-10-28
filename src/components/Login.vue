@@ -3,7 +3,7 @@
     <img :src="imgSrc" width="100%" height="100%" alt="" />
     <div class="loginpage">
     <div id="title">欢迎登陆</div>
-    <el-form :model="LoginForm" status-icon :rules="rules2" ref="LoginForm" label-width="100px"
+    <el-form :model="LoginForm" status-icon :rules="rules" ref="LoginForm" label-width="100px"
              class="demo-LoginForm">
       <el-form-item label="用户名" prop="username">
         <el-input v-model.number="LoginForm.username"></el-input>
@@ -45,8 +45,8 @@
           password: '',
           userName: ''
         },
-        rules2: {
-          pass: [
+        rules: {
+          password: [
             {validator: validatePass, trigger: 'blur'}
           ],
           username: [
@@ -59,9 +59,9 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('submit!');
+            alert('登录成功!');
           } else {
-            console.log('error submit!!');
+            console.log('登陆失败!!');
             return false;
           }
         });
