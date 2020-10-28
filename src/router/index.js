@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld';
+import Login from 'Login'
 import HomeStudent from "@/components/HomeStudent";
 import HomeTeacher from "@/components/HomeTeacher";
 import HomeEmp from "@/components/HomeEmp";
@@ -14,8 +14,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      name: 'Login',
+      component: Login
     },{
       path:'/homeStudent',
       name:'HomeStudent',
