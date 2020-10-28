@@ -56,15 +56,20 @@
       };
     },
     methods: {
-      submitForm(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            alert('登录成功!');
+      submitForm() {
+        //提交
+        axios.get("/login/" + this.form.username + "/" +
+          this.form.pwd).then(res=>{
+          if ("sucess" == res.data){
+            //将用户名存储到store仓库中
+            //调用actions的方法
+            this.$store.dispatch("setUser",this.form.username);
+            //页面跳转
+            this.$router.push({path:"empList"})
           } else {
-            console.log('登陆失败!!');
-            return false;
+            this.$message("用户名或密码错误!")
           }
-        });
+        })
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
@@ -83,6 +88,7 @@
     margin: 0;
   }
   .loginpage{
+    font-size: 20px;
     background-color: rgba(255, 255, 255, 0.4);
     color: black;
     z-index:1;
