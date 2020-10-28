@@ -58,8 +58,8 @@
     methods: {
       submitForm() {
         //提交
-        axios.get("/login/" + this.form.username + "/" +
-          this.form.pwd).then(res=>{
+        axios.get("localhost:8080/login/" + this.form.username + "/" +
+          this.form.password).then(res=>{
           if ("sucess" == res.data){
             //将用户名存储到store仓库中
             //调用actions的方法
