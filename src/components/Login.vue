@@ -38,7 +38,7 @@
           <el-button
             class="homeBut"
             type="primary"
-            @click="submit"
+            @click="submit('form')"
             :loading="logining"
           >登录</el-button>
           <el-button
@@ -60,8 +60,8 @@
         imgSrc:require("../assets/images/bg.jpg"),
         logining: false,
         form: {
-          uid: 'admin',
-          password: '123'
+          uid: '0',
+          password: '333'
         },
         ruleForm: {
           uid: [
@@ -74,19 +74,42 @@
       }
     },
     methods: {
-      submit(event) {
+      submit(event){
         this.$refs.form.validate((valid) => {
-          if (valid) {
+          if (valid){
             //提交
             axios.get("http://localhost:8080/login/" + this.form.uid + "/" +
               this.form.password).then(res=>{
-                if ('success' == res.data) {
+                switch (res.data) {
+                  case 'admin':
+                    //this.$store.dispatch("setUser",this.form.uid);
+                    this.$router.push({path:"/homeAdmin"});
+                    break;
+                  case 'student':
+                    this.$router.push({path:"/homeStudent"});
+                    break;
+                  case 'teacher':
+                    this.$router.push({path:"/homeTeacher"});
+                    break;
+                  case 'clerk':
+                    this.$router.push({path:"/homeClerk"});
+                    break;
+                  case 'manager':
+                    this.$router.push({path:"/homeManager"});
+                    break;
+                  case 'error':
+                    this.message("用户名或密码错误!!!!!!");
+                    break
+                  default:
+                    break;
+                }
+                /*if ('success' == res.data) {
                   this.logining = false;
                   //sessionStorage.setItem('user', this.form.name);
                   this.$message("恭喜恭喜，你牛逼大了");
                 } else {
                 this.$message("用户名或密码错误!")
-              }
+              }*/
             })
           } else {
             alert('error submit!');

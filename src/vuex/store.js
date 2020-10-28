@@ -1,16 +1,17 @@
 import Vue from "vue";
 //引入vuex，类似vue-router
-import Vuex from "vuex";
+import Vuex from "vuex"
+
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state:{ //状态，要管理的数据
     count:0,
-    uid:null
+    userid:null
   },
   mutations: { //定义方法：set方法，用于给数据赋值
     setUid:function (state, uid) {
-      state.uid = uid;  //将外部参数赋值给state对象中的数据
+      state.userid = uid;  //将外部参数赋值给state对象中的数据
     }
   },
   actions:{
@@ -19,7 +20,7 @@ const store = new Vuex.Store({
     //支持异步操作
     setUser:function (context,uid) {
       //第一个参数为mutation对象，第二个为传递进来的数据
-      context.commit("setUname",uid);
+      context.commit("setUid",uid);
     }
   }
 })
