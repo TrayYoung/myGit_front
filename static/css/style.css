@@ -1,0 +1,64 @@
+td{
+  background-color:#E2F2FF ;
+  text-align: center;
+}
+.goodsTd{
+  background-color: #E2F2FF;
+  text-align: left;
+}
+#delTab{
+  background-color: white;
+  text-align: left;
+  vertical-align: bottom;
+}
+.count{
+  background-color: white;
+  text-align: right;
+}
+.goods{
+  display: inline-block;
+  margin-left: 2px;
+  text-align: left;
+  vertical-align: middle;
+}
+.goodsName{
+  color: #1965B3;
+}
+.total{
+  font-weight: bold;
+  color: #FE6400;
+}
+/*.delOne{
+    color: #1965B3;
+}*/
+.goodsNum{
+  width: 30px;
+}
+#totalPrice{
+  font-size: 30px;
+  font-weight: bold;
+  color: #FE6400;
+}
+#totalCredits{
+  font-size: 25px;
+  font-weight: bold;
+  color: #FE6400;
+}
+.credit{
+  width: 100px;
+  font-weight: bold;
+}
+.delTd{
+  width: 90px;
+  color: #1965B3;
+  cursor: pointer;
+}
+.subTitle{
+  text-align: left;
+  background-color: white;
+}
+#hr{
+  background-color: #C6DDFF;
+  height: 4px;
+  border-color: white;
+}
