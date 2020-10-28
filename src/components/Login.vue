@@ -82,7 +82,7 @@
               this.form.password).then(res=>{
                 switch (res.data) {
                   case 'admin':
-                    //this.$store.dispatch("setUser",this.form.uid);
+                    //this.$store.dispatch("setUser",this.form.uid);/
                     this.$router.push({path:"/homeAdmin"});
                     break;
                   case 'student':
