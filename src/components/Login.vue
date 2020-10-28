@@ -1,73 +1,96 @@
+
 <template>
-  <div class="page">
-    <img :src="imgSrc" width="100%" height="100%" alt="" />
+  <div id="page">
+    <img :src="imgSrc" width="100%" height="100%">
     <div class="loginpage">
-    <div id="title">欢迎登陆</div>
-    <el-form :model="LoginForm" status-icon :rules="rules" ref="LoginForm" label-width="100px"
-             class="demo-LoginForm">
-      <el-form-item label="用户名" prop="username">
-        <el-input v-model.number="LoginForm.username"></el-input>
-      </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input type="password" v-model="LoginForm.password" auto-complete="off"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="submitForm('LoginForm')">提交</el-button>
-        <el-button @click="resetForm('LoginForm')">重置</el-button>
-      </el-form-item>
-    </el-form>
-  </div>
+      <el-form
+        ref="form"
+        :model="form"
+        :rules="ruleForm"
+        status-icon
+        label-width="80px"
+        class="loginForm"
+      >
+        <h3 id="title">登陆</h3>
+        <el-form-item
+          label="账号"
+          prop="uid"
+        >
+          <el-input
+            type="text"
+            v-model="form.uid"
+            auto-complete="off"
+            placeholder="请输入账号"
+          ></el-input>
+        </el-form-item>
+        <el-form-item
+          label="密码"
+          prop="password"
+        >
+          <el-input
+            type="password"
+            v-model="form.password"
+            auto-complete="off"
+            placeholder="请输入密码"
+          ></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            class="homeBut"
+            type="primary"
+            @click="submit"
+            :loading="logining"
+          >登录</el-button>
+          <el-button
+            class="loginBut"
+            type="primary"
+            @click="resetForm('form')"
+          >重置</el-button>
+        </el-form-item>
+      </el-form>
+
+    </div>
   </div>
 </template>
-
 <script>
+  import axios from 'axios';
   export default {
-    name:"Login",
     data() {
-      var checkUsername= (rule, value, callback) => {
-        if (!value) {
-          return callback(new Error('用户名不能为空'));
-        }
-      };
-      var validatePass = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入密码'));
-        } else {
-          if (this.ruleForm2.checkPass !== '') {
-            this.$refs.ruleForm2.validateField('checkPass');
-          }
-          callback();
-        }
-      };
       return {
-        imgSrc:require('../assets/images/bg.jpg'),
-        LoginForm: {
-          password: '',
-          userName: ''
+        imgSrc:require("../assets/images/bg.jpg"),
+        logining: false,
+        form: {
+          uid: 'admin',
+          password: '123'
         },
-        rules: {
-          password: [
-            {validator: validatePass, trigger: 'blur'}
+        ruleForm: {
+          uid: [
+            { required: true, message: '请输入账号', trigger: 'blur' },
           ],
-          username: [
-            {validator: checkUsername, trigger: 'blur'}
+          password: [
+            { required: true, message: '请输入密码', trigger: 'blur' },
           ]
         }
-      };
+      }
     },
     methods: {
-      submitForm() {
-        //提交
-        axios.get("localhost:8080/login/" + this.form.username + "/" +
-          this.form.password).then(res=>{
-          if ("sucess" == res.data){
-            //将用户名存储到store仓库中
-            //调用actions的方法
-            this.$store.dispatch("setUser",this.form.username);
-            //页面跳转
-            this.$router.push({path:"empList"})
+      submit(event) {
+        this.$refs.form.validate((valid) => {
+          if (valid) {
+            //提交
+            axios.get("http://localhost:8080/login/" + this.form.uid + "/" +
+              this.form.password).then(res=>{
+                if ('success' == res.data) {
+                  this.logining = false;
+                  //sessionStorage.setItem('user', this.form.name);
+                  this.$message("恭喜恭喜，你牛逼大了");
+                } else {
+                this.$message("用户名或密码错误!")
+              }
+            })
           } else {
-            this.$message("用户名或密码错误!")
+            alert('error submit!');
+            return false;
           }
         })
       },
@@ -79,7 +102,7 @@
 </script>
 
 <style scoped>
-  .page{
+  #page{
     z-index:-1;
     background-size: 100% 100%;
     height: 100%;
