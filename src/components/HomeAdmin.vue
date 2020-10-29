@@ -16,7 +16,8 @@
           <el-col :span="8" class="rightsection">
 
             <div class="grid-content bg-purple-light">
-              <span class="el-dropdown-link userinfo-inner">欢迎您，<!--{{$store.state.userid}}--></span>
+              <span class="el-dropdown-link userinfo-inner">欢迎您，{{$store.state.uid}}
+              {{$store.state.password}}</span>
             </div>
           </el-col>
         </el-row>

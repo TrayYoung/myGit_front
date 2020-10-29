@@ -60,8 +60,8 @@
         imgSrc:require("../assets/images/bg.jpg"),
         logining: false,
         form: {
-          uid: '0',
-          password: '333'
+          uid: '',
+          password: ''
         },
         ruleForm: {
           uid: [
@@ -82,7 +82,8 @@
               this.form.password).then(res=>{
                 switch (res.data) {
                   case 'admin':
-                    //this.$store.dispatch("setUser",this.form.uid);/
+                    this.$store.dispatch("setUser",this.form.uid);
+                    this.$store.dispatch("setUpwd",this.form.password);
                     this.$router.push({path:"/homeAdmin"});
                     break;
                   case 'student':
@@ -97,19 +98,10 @@
                   case 'manager':
                     this.$router.push({path:"/homeManager"});
                     break;
-                  case 'error':
-                    this.message("用户名或密码错误!!!!!!");
-                    break
                   default:
+                    this.$message("用户名或密码错误!!!!!!");
                     break;
                 }
-                /*if ('success' == res.data) {
-                  this.logining = false;
-                  //sessionStorage.setItem('user', this.form.name);
-                  this.$message("恭喜恭喜，你牛逼大了");
-                } else {
-                this.$message("用户名或密码错误!")
-              }*/
             })
           } else {
             alert('error submit!');
