@@ -78,7 +78,7 @@
         this.$refs.form.validate((valid) => {
           if (valid){
             //提交
-            axios.get("http://localhost:8080/login/" + this.form.uid + "/" +
+            axios.get("http://localhost:8081/login/" + this.form.uid + "/" +
               this.form.password).then(res=>{
                 switch (res.data) {
                   case 'admin':
