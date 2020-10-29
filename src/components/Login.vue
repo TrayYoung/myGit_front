@@ -48,7 +48,6 @@
           >重置</el-button>
         </el-form-item>
       </el-form>
-
     </div>
   </div>
 </template>
@@ -78,15 +77,17 @@
         this.$refs.form.validate((valid) => {
           if (valid){
             //提交
-            axios.get("http://localhost:8081/login/" + this.form.uid + "/" +
+            debugger
+            axios.get("login/" + this.form.uid + "/" +
               this.form.password).then(res=>{
                 if (res.data == null || res.data == ""){
                   this.$message("账号或者密码错误")
                 } else {
                 var role = res.data.role;
                 var username = res.data.userName;
-                var password = res.data.password;
-                this.$store.dispatch("setUser",username);
+                //var password = res.data.password;
+                this.$store.dispatch("setUname",username);
+                this.$store.dispatch("setUid",this.form.uid);
                 switch (role) {
                   case 0:
                     this.$router.push({path:"/homeAdmin"});
@@ -110,7 +111,7 @@
                 }
             })
           } else {
-            alert('error submit!');
+            alert('信息错误!');
             return false;
           }
         })
