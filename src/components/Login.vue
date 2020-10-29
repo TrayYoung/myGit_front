@@ -60,8 +60,8 @@
         imgSrc:require("../assets/images/bg.jpg"),
         logining: false,
         form: {
-          uid: '0',
-          password: '333'
+          uid: '',
+          password: ''
         },
         ruleForm: {
           uid: [
@@ -80,36 +80,35 @@
             //提交
             axios.get("http://localhost:8081/login/" + this.form.uid + "/" +
               this.form.password).then(res=>{
-                switch (res.data) {
-                  case 'admin':
-                    //this.$store.dispatch("setUser",this.form.uid);/
+                if (res.data == null || res.data == ""){
+                  this.$message("账号或者密码错误")
+                } else {
+                var role = res.data.role;
+                var username = res.data.userName;
+                var password = res.data.password;
+                switch (role) {
+                  case 0:
+                    this.$store.dispatch("setUser",username);
+                    this.$store.dispatch("setUpwd",password);
                     this.$router.push({path:"/homeAdmin"});
                     break;
-                  case 'student':
+                  case 1:
                     this.$router.push({path:"/homeStudent"});
                     break;
-                  case 'teacher':
+                  case 2:
                     this.$router.push({path:"/homeTeacher"});
                     break;
-                  case 'clerk':
+                  case 3:
                     this.$router.push({path:"/homeClerk"});
                     break;
-                  case 'manager':
+                  case 4:
                     this.$router.push({path:"/homeManager"});
                     break;
-                  case 'error':
-                    this.message("用户名或密码错误!!!!!!");
-                    break
                   default:
+                    this.$message("登陆失败!");
                     break;
                 }
-                /*if ('success' == res.data) {
-                  this.logining = false;
-                  //sessionStorage.setItem('user', this.form.name);
-                  this.$message("恭喜恭喜，你牛逼大了");
-                } else {
-                this.$message("用户名或密码错误!")
-              }*/
+                }
             })
           } else {
             alert('error submit!');
