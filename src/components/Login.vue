@@ -86,10 +86,9 @@
                 var role = res.data.role;
                 var username = res.data.userName;
                 var password = res.data.password;
+                this.$store.dispatch("setUser",username);
                 switch (role) {
                   case 0:
-                    this.$store.dispatch("setUser",username);
-                    this.$store.dispatch("setUpwd",password);
                     this.$router.push({path:"/homeAdmin"});
                     break;
                   case 1:
