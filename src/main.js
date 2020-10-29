@@ -6,6 +6,9 @@ import router from './router'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import store from './vuex/store';
+import axios from 'axios'
+axios.defaults.baseURL='http://localhost:8080/'
+Vue.prototype.axios = axios
 
 Vue.use(ElementUI);
 Vue.config.productionTip = false;
@@ -16,5 +19,5 @@ new Vue({
   router,
   components: { App },
   template: '<App/>',
-  store
+  store,
 });
