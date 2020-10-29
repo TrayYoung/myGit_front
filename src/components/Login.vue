@@ -87,7 +87,8 @@
                 var username = res.data.userName;
                 //var password = res.data.password;
                 this.$store.dispatch("setUname",username);
-                this.$store.dispatch("setUid",this.form.uid);
+                //this.$store.dispatch("setUid",this.form.uid);
+                  this.$store.dispatch("setRole",role);
                 switch (role) {
                   case 0:
                     this.$router.push({path:"/homeAdmin"});

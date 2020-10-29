@@ -15,6 +15,9 @@ const store = new Vuex.Store({
     setUid:function (state,uid) {
       state.uid = uid;
     },
+    setRole:function (state, role) {
+      state.role = role;
+    },
     setUname:function (state, username) {
       state.username = username;  //将外部参数赋值给state对象中的数据
     },
@@ -26,6 +29,9 @@ const store = new Vuex.Store({
     //作用同mutations，提供方法给数据赋值
     //调用mutations中的方法，类似于dao的service关系
     //支持异步操作
+    setRole:function (context,role) {
+      context.commit("setRole",role);
+    },
     setUid:function (context,uid) {
       //第一个参数为mutation对象，第二个为传递进来的数据
       context.commit("setUid",uid);
