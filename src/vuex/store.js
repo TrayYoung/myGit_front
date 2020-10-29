@@ -7,11 +7,11 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state:{ //状态，要管理的数据
     count:0,
-    userid:null
+    uid:null
   },
   mutations: { //定义方法：set方法，用于给数据赋值
     setUid:function (state, uid) {
-      state.userid = uid;  //将外部参数赋值给state对象中的数据
+      state.uid = uid;  //将外部参数赋值给state对象中的数据
     }
   },
   actions:{

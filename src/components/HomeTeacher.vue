@@ -2,7 +2,23 @@
   <div>
     <el-container class="container">
       <el-header class="header">
-        教师
+        <el-row>
+          <el-col :span="16" class="headerlogo">
+            <div class="grid-content bg-purple">
+              <!--<img
+                style="width:400px;height: 30px"
+                src="../../assets/img/top.png"
+                alt="无法显示图片"
+              />-->
+              教师
+            </div>
+          </el-col>
+          <el-col :span="8" class="rightsection">
+            <div class="grid-content bg-purple-light">
+              <span class="el-dropdown-link userinfo-inner">欢迎您，{{$store.state.uid}}</span>
+            </div>
+          </el-col>
+        </el-row>
       </el-header>
       <el-container>
         <el-aside class="aside">

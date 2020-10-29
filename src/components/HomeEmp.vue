@@ -3,14 +3,14 @@
     <el-container class="container">
       <el-header class="header">
 
-        <!--<el-row>
+        <el-row>
           <el-col :span="16" class="headerlogo">
             <div class="grid-content bg-purple">
-              &lt;!&ndash;<img
+              <!--<img
                 style="width:400px;height: 30px"
                 src="../../assets/img/top.png"
                 alt="无法显示图片"
-              />&ndash;&gt;
+              />-->
               员工
             </div>
           </el-col>
@@ -19,7 +19,7 @@
               <span class="el-dropdown-link userinfo-inner">欢迎您，{{$store.state.uid}}</span>
             </div>
           </el-col>
-        </el-row>-->
+        </el-row>
       </el-header>
       <el-container>
         <el-aside class="aside">

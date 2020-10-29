@@ -82,23 +82,27 @@
               this.form.password).then(res=>{
                 switch (res.data) {
                   case 'admin':
-                    //this.$store.dispatch("setUser",this.form.uid);/
+                    this.$store.dispatch("setUser",this.form.uid);
                     this.$router.push({path:"/homeAdmin"});
                     break;
                   case 'student':
+                    this.$store.dispatch("setUser",this.form.uid);
                     this.$router.push({path:"/homeStudent"});
                     break;
                   case 'teacher':
+                    this.$store.dispatch("setUser",this.form.uid);
                     this.$router.push({path:"/homeTeacher"});
                     break;
                   case 'clerk':
+                    this.$store.dispatch("setUser",this.form.uid);
                     this.$router.push({path:"/homeClerk"});
                     break;
                   case 'manager':
+                    this.$store.dispatch("setUser",this.form.uid);
                     this.$router.push({path:"/homeManager"});
                     break;
                   case 'error':
-                    this.message("用户名或密码错误!!!!!!");
+                    this.$message("用户名或密码错误!!!!!!");
                     break
                   default:
                     break;
