@@ -80,27 +80,34 @@
             //提交
             axios.get("http://localhost:8080/login/" + this.form.uid + "/" +
               this.form.password).then(res=>{
-                switch (res.data) {
-                  case 'admin':
-                    this.$store.dispatch("setUser",this.form.uid);
-                    this.$store.dispatch("setUpwd",this.form.password);
+                if (res.data == null || res.data == ""){
+                  this.$message("账号或者密码错误")
+                } else {
+                var role = res.data.role;
+                var username = res.data.userName;
+                var password = res.data.password;
+                switch (role) {
+                  case 0:
+                    this.$store.dispatch("setUser",username);
+                    this.$store.dispatch("setUpwd",password);
                     this.$router.push({path:"/homeAdmin"});
                     break;
-                  case 'student':
+                  case 1:
                     this.$router.push({path:"/homeStudent"});
                     break;
-                  case 'teacher':
+                  case 2:
                     this.$router.push({path:"/homeTeacher"});
                     break;
-                  case 'clerk':
+                  case 3:
                     this.$router.push({path:"/homeClerk"});
                     break;
-                  case 'manager':
+                  case 4:
                     this.$router.push({path:"/homeManager"});
                     break;
                   default:
-                    this.$message("用户名或密码错误!!!!!!");
+                    this.$message("登陆失败!");
                     break;
+                }
                 }
             })
           } else {
