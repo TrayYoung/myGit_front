@@ -86,6 +86,7 @@
             style="width: 100%">
 
             <el-table-column type="expand">
+
             </el-table-column>
 
             <el-table-column
@@ -121,7 +122,9 @@
     },
     methods: {
       getClassByTeacher: function () {
-        axios.get("http://localhost:8080/showClass/1000").then(res => {
+        debugger
+        var uid = $store.state.uid;
+        axios.get("http://localhost:8080/showClass/"+uid).then(res => {
           this.tableData=res.data;
         })
       }
