@@ -26,6 +26,8 @@
           <!-- 侧边栏导航  -->
 
           <el-menu
+            :unique-opened="true"
+            :router="true"
             default-active="1"
             class="el-menu-vertical-demo"
             @open="handleOpen"
@@ -34,7 +36,7 @@
             text-color="#fff"
             active-text-color="#ffd04b"
           >
-            <el-menu-item index="1">
+            <el-menu-item index="/classAdministration">
               <template slot="title">
                 <i class="el-icon-document"></i>
                 <span>班级管理</span>
