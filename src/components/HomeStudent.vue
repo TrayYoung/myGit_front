@@ -10,7 +10,7 @@
                 src="../../assets/img/top.png"
                 alt="无法显示图片"
               />-->
-              学生
+              学生信息
             </div>
           </el-col>
           <el-col :span="8" class="rightsection">
@@ -35,44 +35,16 @@
             <el-menu-item index="1">
               <template slot="title">
                 <i class="el-icon-document"></i>
-                <span>班级管理</span>
+                <span>学生信息</span>
               </template>
-              <!--   <el-menu-item-group>
-                   <template slot="title">分组一</template>
-                   <el-menu-item index="1-1">选项1</el-menu-item>
-                   <el-menu-item index="1-2">选项2</el-menu-item>
-                 </el-menu-item-group>
-                 <el-menu-item-group title="分组2">
-                   <el-menu-item index="1-3">选项3</el-menu-item>
-                 </el-menu-item-group>-->
-              <!--  <el-submenu index="1-4">
-                  <template slot="title">选项4</template>
-                  <el-menu-item index="1-4-1">选项1</el-menu-item>
-                </el-submenu>-->
             </el-menu-item>
             <el-menu-item index="2">
               <i class="el-icon-setting"></i>
-              <span slot="title">学生管理</span>
-            </el-menu-item>
-            <el-menu-item index="3">
-              <i class="el-icon-setting"></i>
-              <span slot="title">教师管理</span>
-            </el-menu-item>
-            <el-menu-item index="4">
-              <i class="el-icon-setting"></i>
-              <span slot="title">员工管理</span>
-            </el-menu-item>
-            <el-menu-item index="5">
-              <i class="el-icon-setting"></i>
-              <span slot="title">经理管理</span>
-            </el-menu-item>
-            <el-menu-item index="6">
-              <i class="el-icon-setting"></i>
-              <span slot="title">重置用户密码</span>
+              <span slot="title">本人信息</span>
             </el-menu-item>
             <el-menu-item index="7">
               <i class="el-icon-setting"></i>
-              <span slot="title">修改管理员密码</span>
+              <span slot="title">修改密码</span>
             </el-menu-item>
             <el-menu-item index="8">
               <i class="el-icon-setting"></i>
