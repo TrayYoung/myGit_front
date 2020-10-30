@@ -83,6 +83,7 @@
                 if (res.data == null || res.data == ""){
                   this.$message("账号或者密码错误")
                 } else {
+                  debugger
                 var role = res.data.role;
                 var username = res.data.userName;
                 //var password = res.data.password;

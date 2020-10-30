@@ -6,7 +6,7 @@ import HomeTeacher from "@/components/HomeTeacher";
 import HomeEmp from "@/components/HomeEmp";
 import HomeManager from "@/components/HomeManager";
 import HomeAdmin from "@/components/HomeAdmin";
-
+import DeptList from "@/components/DeptList";
 
 Vue.use(Router)
 
@@ -14,8 +14,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Login',
-      component: Login
+      name: 'DeptList',
+      component: DeptList
     },{
       path:'/homeStudent',
       name:'HomeStudent',
@@ -36,6 +36,10 @@ export default new Router({
       path:'/homeAdmin',
       name:'HomeAdmin',
       component:HomeAdmin
+    },{
+      path:'/deptList',
+      name:'DeptList',
+      component:DeptList
     }
   ]
 })

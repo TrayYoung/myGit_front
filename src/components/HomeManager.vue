@@ -2,85 +2,27 @@
   <div>
     <el-container class="container">
       <el-header class="header">
-        <el-row>
-          <el-col :span="16" class="headerlogo">
-            <div class="grid-content bg-purple">
-              <!--<img
-                style="width:400px;height: 30px"
-                src="../../assets/img/top.png"
-                alt="无法显示图片"
-              />-->
-              经理
-            </div>
-          </el-col>
-          <el-col :span="8" class="rightsection">
-            <div class="grid-content bg-purple-light">
-              <span class="el-dropdown-link userinfo-inner">欢迎您，{{$store.state.usernaem}}</span>
-            </div>
-          </el-col>
-        </el-row>
+        经理
       </el-header>
       <el-container>
-        <el-aside class="aside" width="100px">
-          <!-- 侧边栏导航  -->
+        <el-aside class="aside" width="150px">
           <el-menu
-            default-active="1"
-            class="el-menu-vertical-demo"
-            @open="handleOpen"
-            @close="handleClose"
+            :default-active="activeIndex2"
+            class="el-menu-demo"
+            @select="handleSelect"
             background-color="#545c64"
             text-color="#fff"
-            active-text-color="#ffd04b"
-          >
-            <el-menu-item index="1">
-              <template slot="title">
-                <i class="el-icon-document"></i>
-                <span>班级管理</span>
-              </template>
-              <!--   <el-menu-item-group>
-                   <template slot="title">分组一</template>
-                   <el-menu-item index="1-1">选项1</el-menu-item>
-                   <el-menu-item index="1-2">选项2</el-menu-item>
-                 </el-menu-item-group>
-                 <el-menu-item-group title="分组2">
-                   <el-menu-item index="1-3">选项3</el-menu-item>
-                 </el-menu-item-group>-->
-              <!--  <el-submenu index="1-4">
-                  <template slot="title">选项4</template>
-                  <el-menu-item index="1-4-1">选项1</el-menu-item>
-                </el-submenu>-->
-            </el-menu-item>
-            <el-menu-item index="2">
-              <i class="el-icon-setting"></i>
-              <span slot="title">学生管理</span>
-            </el-menu-item>
-            <el-menu-item index="3">
-              <i class="el-icon-setting"></i>
-              <span slot="title">教师管理</span>
-            </el-menu-item>
-            <el-menu-item index="4">
-              <i class="el-icon-setting"></i>
-              <span slot="title">员工管理</span>
-            </el-menu-item>
-            <el-menu-item index="5">
-              <i class="el-icon-setting"></i>
-              <span slot="title">经理管理</span>
-            </el-menu-item>
-            <el-menu-item index="6">
-              <i class="el-icon-setting"></i>
-              <span slot="title">重置用户密码</span>
-            </el-menu-item>
-            <el-menu-item index="7">
-              <i class="el-icon-setting"></i>
-              <span slot="title">修改管理员密码</span>
-            </el-menu-item>
-            <el-menu-item index="8">
-              <i class="el-icon-setting"></i>
-              <span slot="title">退出登录</span>
-            </el-menu-item>
+            active-text-color="#ffd04b">
+            <el-menu-item index="1" @click=""><i class="el-icon-s-order"></i>个人信息</el-menu-item>
+            <el-menu-item index="2"><i class="el-icon-s-tools"></i>员工管理</el-menu-item>
+            <el-menu-item index="3" @click="exit"><i class="el-icon-delete-solid"></i>退出系统</el-menu-item>
           </el-menu>
         </el-aside>
         <el-main class="main">
+          <el-row>
+            <el-button type="primary">查看详细信息</el-button>
+            <el-button type="success">编辑</el-button>
+          </el-row>
           <el-table
             :data="tableData"
             border
@@ -102,12 +44,17 @@
             </el-table-column>
             <el-table-column
               prop="tel"
-              label="電話"
+              label="电话"
               width="180">
             </el-table-column>
             <el-table-column
               prop="birthday"
               label="生日"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="dname"
+              label="所在部门"
               width="180">
             </el-table-column>
           </el-table>
@@ -119,19 +66,23 @@
 
 <script>
   import axios from 'axios';
+
   export default {
     name: "HomeManager",
-    data(){
-      return{
+    data() {
+      return {
         tableData: [],
 
       }
     },
-    methods:{
+    methods: {
       getInfo: function () { //获取经理个人信息
-        axios.get("http://localhost:8081/showInfo/1").then(res => {
+        axios.get("http://localhost:8080/showInfo/1").then(res => {
           this.tableData = res.data;
         })
+      },
+      exit: function () {
+        this.$router.push({path: "/"});
       }
     },
     mounted() {
@@ -145,15 +96,18 @@
     height: 100vh;
     font-size: 15px;
   }
+
   .header {
     background: #212121;
     color: #fff;
   }
+
   .aside {
     background: #3a3a3a;
     color: #fff;
     /* height: 100%; */
   }
+
   .main {
     /* height: 100%; */
     color: #212121;
