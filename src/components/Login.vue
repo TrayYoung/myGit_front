@@ -92,7 +92,8 @@
                   this.$store.dispatch("setRole",role);
                 switch (role) {
                   case 0:
-                    this.$router.push({path:"/homeAdmin"});
+                    //this.$router.push({path:"/homeAdmin"});
+                    this.$router.push({path:"/empMain"});
                     break;
                   case 1:
                     this.$router.push({path:"/homeStudent"});
