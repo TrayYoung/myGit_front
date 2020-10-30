@@ -7,6 +7,7 @@ import HomeEmp from "@/components/HomeEmp";
 import HomeManager from "@/components/HomeManager";
 import HomeAdmin from "@/components/HomeAdmin";//所有的组件都一一对应，否则空白页面
 import EmpMain from "@/components/EmpMain"
+import DeptList from "@/components/DeptList"
 /*import Navigation from "@/components/Navigation"*/
 
 import StudentAdministration from "@/components/StudentAdministration";
@@ -64,7 +65,11 @@ export default new Router({
           component:TeacherAdministration
         }
       ]
-    }
+    },{
+      path:'/deptList',
+      name:'DeptList',
+      component:DeptList
+    },
      /* children:[
         {
           path:'/classAdministration',

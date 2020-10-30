@@ -14,7 +14,7 @@
             text-color="#fff"
             active-text-color="#ffd04b">
             <el-menu-item index="1" @click=""><i class="el-icon-s-order"></i>个人信息</el-menu-item>
-            <el-menu-item index="2"><i class="el-icon-s-tools"></i>员工管理</el-menu-item>
+            <el-menu-item index="2" @click="manage"><i class="el-icon-s-tools"></i>员工管理</el-menu-item>
             <el-menu-item index="3" @click="exit"><i class="el-icon-delete-solid"></i>退出系统</el-menu-item>
           </el-menu>
         </el-aside>
@@ -29,33 +29,27 @@
             style="width: 100%">
             <el-table-column
               prop="empno"
-              label="员工编号"
-              width="180">
+              label="员工编号">
             </el-table-column>
             <el-table-column
               prop="ename"
-              label="姓名"
-              width="180">
+              label="姓名">
             </el-table-column>
             <el-table-column
               prop="sex"
-              label="性别"
-              width="180">
+              label="性别">
             </el-table-column>
             <el-table-column
               prop="tel"
-              label="电话"
-              width="180">
+              label="电话">
             </el-table-column>
             <el-table-column
               prop="birthday"
-              label="生日"
-              width="180">
+              label="生日">
             </el-table-column>
             <el-table-column
               prop="dname"
-              label="所在部门"
-              width="180">
+              label="所在部门">
             </el-table-column>
           </el-table>
         </el-main>
@@ -83,7 +77,10 @@
       },
       exit: function () {
         this.$router.push({path: "/"});
-      }
+      },
+      manage: function () {
+        this.$router.push({path: "/DeptList"});
+      },
     },
     mounted() {
       this.getInfo();
