@@ -14,8 +14,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'DeptList',
-      component: DeptList
+      name: 'Login',
+      component: Login
     },{
       path:'/homeStudent',
       name:'HomeStudent',
