@@ -1,12 +1,12 @@
 <template>
   <div>
-    <h1>修改密码</h1>
+    <h1>我的课程——教师</h1>
   </div>
 </template>
 
 <script>
     export default {
-        name: "ChangePwd"
+        name: "MyCourse_Teacher"
     }
 </script>
 

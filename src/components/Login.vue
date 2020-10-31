@@ -90,10 +90,12 @@
                 this.$store.dispatch("setUname",username);
                 //this.$store.dispatch("setUid",this.form.uid);
                   this.$store.dispatch("setRole",role);
-                switch (role) {
+                  this.$router.push({path:"/empMain"});
+
+               /* switch (role) {
                   case 0:
                     //this.$router.push({path:"/homeAdmin"});
-                    this.$router.push({path:"/empMain"});
+                    this.$router.push({path:"/homeAdmin"});
                     break;
                   case 1:
                     this.$router.push({path:"/homeStudent"});
@@ -110,7 +112,7 @@
                   default:
                     this.$message("登陆失败!");
                     break;
-                }
+                }*/
                 }
             })
           } else {
