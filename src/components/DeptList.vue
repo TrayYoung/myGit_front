@@ -48,6 +48,18 @@
         sortable
         width="120">
       </el-table-column>
+      <el-table-column
+        align="center"
+        width="150">
+        <template slot="header" slot-scope="scope">
+          操作
+        </template>
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            @click="handleShowInfo(scope.$index, scope.row)">查看详细信息</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <!--分页器-->
     <el-pagination align='center'
@@ -100,6 +112,9 @@
       },
       handleSelectionChange(val) {
         console.log(val)
+      },
+      handleShowInfo(index,row){
+
       }
 
     },
