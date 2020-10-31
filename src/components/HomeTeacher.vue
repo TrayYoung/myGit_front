@@ -114,8 +114,6 @@
             </el-table-column>
           </el-table>
 
-
-
         </el-main>
       </el-container>
     </el-container>
