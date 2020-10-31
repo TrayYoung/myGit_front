@@ -1,12 +1,12 @@
 <template>
   <div>
-    <h1>修改密码</h1>
+    <h1>员工学校评价</h1>
   </div>
 </template>
 
 <script>
     export default {
-        name: "ChangePwd"
+        name: "SchoolComment_Student"
     }
 </script>
 
