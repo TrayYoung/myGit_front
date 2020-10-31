@@ -1,6 +1,5 @@
 <template>
   <div>
-<!--    <h1>我的部门——经理</h1>-->
       <el-input v-model="tableDataName" placeholder="请输入姓名" style="width:240px"></el-input>
       <el-button type="primary" @click="getEmpByDeptno">搜索</el-button>
       <!--表格-->
