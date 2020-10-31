@@ -2,7 +2,10 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
+import EmpMain from '@/components/EmpMain'
 import router from './router'
+/*import router1 from './router'*/
+
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import store from './vuex/store';
@@ -21,3 +24,10 @@ new Vue({
   template: '<App/>',
   store,
 });
+/*new Vue({
+  el: '#mainDisplay',
+  router,
+  components: { EmpMain },
+  template: '<EmpMain/>',
+  store,
+});*/

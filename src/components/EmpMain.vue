@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-container style=" border: 1px solid #eee">
-      <el-header style=" font-size: 12px;height: 9vh">
+      <el-header class="header">
         <div style="float: left;">
           <span style="font-size: 20px;font-family: PingFang SC;">欢迎使用员工评价系统</span>
         </div>
@@ -11,13 +11,19 @@
         </div>
       </el-header>
       <el-container>
-        <el-aside width="250px" style="background-color: rgb(238, 241, 246);height: 90vh">
-          <el-menu>
+        <el-aside width="250px" style="background-color: rgb(238, 241, 246);height: 85vh">
+          <el-menu
+            default-active="/classAdministration">
             <navigation-item v-for="(menu,i) in adminMenus" :key="i" :item="menu"/>
+            <el-menu-item style="font-size: 17px;"  @click="exitSys">
+              <i class="el-icon-switch-button"></i>
+              <span slot="title">退出系统</span>
+            </el-menu-item>
           </el-menu>
         </el-aside>
         <el-container>
           <el-main>
+            <div id="mainDisplay"></div>
             <router-view></router-view>
           </el-main>
         </el-container>
@@ -628,13 +634,7 @@
           this.$router.push("/Login");
         }
       },
-    }
-    ,
-    created() {
-      this.isLogin();
-      this.getMenu();
-    }
-    ,
+    },
     mounted() {
       // this.getFoodList();
       // this.getEmpList();
@@ -643,10 +643,7 @@
       // this.getOrderListByPage();
       // this.getOrderList();
     }
-    ,
-    components: {
-      "navigation-item": NavigationItem
-    }*/
+  */
     },
     created() {
       //this.isLogin();
@@ -665,6 +662,8 @@
   }
   .header {
     background: #212121;
+    font-size: 12px;
+    height: 9vh;
     color: #fff;
   }
   .aside {

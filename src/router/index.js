@@ -7,19 +7,17 @@ import HomeEmp from "@/components/HomeEmp";
 import HomeManager from "@/components/HomeManager";
 import HomeAdmin from "@/components/HomeAdmin";//所有的组件都一一对应，否则空白页面
 import EmpMain from "@/components/EmpMain"
-import DeptList from "@/components/DeptList"
 /*import Navigation from "@/components/Navigation"*/
 
+import ClassAdministration from "@/components/ClassAdministration";
 import StudentAdministration from "@/components/StudentAdministration";
 import TeacherAdministration from "@/components/TeacherAdministration";
-/*import ClassAdministration from "@/components/ClassAdministration";
-
 import ClerkAdministration from "@/components/ClerkAdministration";
 import ManagerAdministration from "@/components/ManagerAdministration";
-import ResetPassword from "@/components/ResetPassword";*/
+import ResetPassword from "@/components/ResetPassword";
 
-/*import BaseInfo from "@/components/BaseInfo";
-import Comment from "@/components/Comment";*/
+import BaseInfo from "@/components/BaseInfo";
+import Comment from "@/components/Comment";
 
 Vue.use(Router)
 
@@ -55,58 +53,30 @@ export default new Router({
       component: EmpMain,
       children:[
         {
-          path:'/studentAdministration',
-          name:'StudentAdministration',
-          component:StudentAdministration
-        },
-        {
-          path:'/teacherAdministration',
-          name:'TeacherAdministration',
-          component:TeacherAdministration
-        }
-      ]
-    },{
-      path:'/deptList',
-      name:'DeptList',
-      component:DeptList
-    },
-     /* children:[
-        {
           path:'/classAdministration',
           name:'ClassAdministration',
           component:ClassAdministration
-        },{
+        }, {
           path:'/studentAdministration',
           name:'StudentAdministration',
           component:StudentAdministration
-        },{
-          path:'/teacherAdminitration',
+        }, {
+          path:'/teacherAdministration',
           name:'TeacherAdministration',
           component:TeacherAdministration
-        },{
-          path:'/clerkAdmintration',
+        }, {
+          path:'/clerkAdministration',
           name:'ClerkAdministration',
           component:ClerkAdministration
-        },{
-          path:'/managerAdminitration',
+        }, {
+          path:'/managerAdministration',
           name:'ManagerAdministration',
           component:ManagerAdministration
-        },{
+        }, {
           path:'/resetPassword',
           name:'ResetPassword',
           component:ResetPassword
-        }
-      ]*/
-    ]
-
-
-
-    /*{
-      path:'/navigationItem',
-      name:'NavigationItem',
-      component:NavigationItem,
-      /!*children:[
-        {
+        },{
           path:'/baseInfo',
           name:'BaseInfo',
           component:BaseInfo
@@ -115,7 +85,12 @@ export default new Router({
           name:'Comment',
           component:Comment
         }
-      ]*!/
-    }*/
+      ]
+    }
+    ]
+
+
+
+
 
 })
