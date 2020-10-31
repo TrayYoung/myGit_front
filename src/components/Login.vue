@@ -87,6 +87,7 @@
                 var role = res.data.role;
                 var username = res.data.userName;
                 //var password = res.data.password;
+                  this.$store.dispatch("setUid",this.form.uid)
                 this.$store.dispatch("setUname",username);
                 //this.$store.dispatch("setUid",this.form.uid);
                   this.$store.dispatch("setRole",role);
