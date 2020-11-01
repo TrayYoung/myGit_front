@@ -73,7 +73,7 @@
     methods:{
       getStuMessage:function () {
         var empno = 10001;
-        axios.get("http://localhost:8080/getStudent/" + empno).then(res =>{
+        axios.get("http://localhost:8080/getMessage/" + empno).then(res =>{
           this.form = res.data;
         })
       }
