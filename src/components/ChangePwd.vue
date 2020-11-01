@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>修改密码</h1>
+    <h1>修改密码（公用）</h1>
   </div>
 </template>
 
