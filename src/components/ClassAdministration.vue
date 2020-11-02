@@ -193,6 +193,7 @@
           },
           getClassMemberByCNo:function (cNo) {
 
+            /**/
             axios.get("/getClassMemberByCNo/"+cNo).then(res => {
               this.studentTable=res.data;
             });
