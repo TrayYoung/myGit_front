@@ -10,33 +10,42 @@
   <el-table
     :data="tableData"
     height="600"
-    border
     style="width: 100%">
     <el-table-column type="expand">
       <template slot-scope="props">
-        <el-form label-position="left" inline class="demo-table-expand">
-          <el-form-item label="学生姓名">
-            <span>{{ props.row.name }}</span>
-          </el-form-item>
-          <el-form-item label="成绩1">
-            <span>{{ props.row.shop }}</span>
-          </el-form-item>
-          <el-form-item label="成绩2">
-            <span>{{ props.row.id }}</span>
-          </el-form-item>
-          <el-form-item label="店铺 ID">
-            <span>{{ props.row.shopId }}</span>
-          </el-form-item>
-          <el-form-item label="商品分类">
-            <span>{{ props.row.category }}</span>
-          </el-form-item>
-          <el-form-item label="店铺地址">
-            <span>{{ props.row.address }}</span>
-          </el-form-item>
-          <el-form-item label="商品描述">
-            <span>{{ props.row.desc }}</span>
-          </el-form-item>
-        </el-form>
+        <el-table
+          empty-text="当前班级无学员"
+          :data="studentTable"
+          height="250"
+          border
+          style="width: 100%">
+          <el-table-column
+            prop="empno"
+            label="学员编号"
+          >
+          </el-table-column>
+          <el-table-column
+            prop="ename"
+            label="学员姓名"
+          >
+          </el-table-column>
+
+
+
+          <!-- <el-table-column
+          prop="post_time"
+          label="新闻源">
+          </el-table-column>
+          <el-table-column
+          prop="post_time"
+          label="媒体类型">
+          </el-table-column>
+          <el-table-column
+          prop="post_time"
+          label="操作">
+          </el-table-column> -->
+        </el-table>
+
       </template>
     </el-table-column>
 
@@ -79,6 +88,7 @@
       data() {
         return {
           tableData: [],
+          studentTable:[]
         }
       },
       methods: {
@@ -89,10 +99,17 @@
             this.tableData=res.data;
           })
         },
+        getStudentByClass:function () {
+          var cls = 1;
+          axios.get("http://localhost:8080/showStudent/"+cls).then(res =>{
+            this.studentTable=res.data;
+          })
+        }
+
       },
       mounted() {
         this.getClassByTeacher();
-
+        this.getStudentByClass();
       }
     };
 
