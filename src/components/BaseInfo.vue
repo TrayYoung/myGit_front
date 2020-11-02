@@ -2,7 +2,7 @@
   <div>
     <div style="width: 25%;height: 30%;
               border: black;float: right;position: fixed;left: 80%">
-      <img src="../assets/logo.png" alt="">
+<!--      <img src="../assets/logo.png" alt="">-->
     </div>
       <div>
             <el-form ref="form" :model="form" label-width="100px">

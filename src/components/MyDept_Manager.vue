@@ -92,11 +92,11 @@
     methods: {
       getEmpByDeptno: function () {
         if (this.tableDataName != "") {
-          axios.get("http://localhost:8080/getEmpByDeptnoAndName/1/" + this.tableDataName).then(res => {
+          axios.get("getEmpByDeptnoAndName/1/" + this.tableDataName).then(res => {
             this.tableData = res.data;
           })
         } else {
-          axios.get("http://localhost:8080/getEmpByDeptno/1").then(res => {
+          axios.get("getEmpByDeptno/1").then(res => {
             this.tableData = res.data;
           })
         }
