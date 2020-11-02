@@ -100,6 +100,7 @@
                         this.$store.dispatch('setUid', null);
                         this.$store.dispatch('setUpwd', null);
                         this.$store.dispatch('setUrole', null);
+                        this.$store.dispatch("setClassNo",null);
                         //sessionStorage.setItem('userName', null);
                         this.$router.push({path: '/'})
                       } else if (res.data === "different") {
