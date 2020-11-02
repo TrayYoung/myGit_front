@@ -2,7 +2,7 @@
   <div>
     <div style="width: 25%;height: 30%;
               border: black;float: right;position: fixed;left: 80%">
-      <img src="../assets/logo.png" alt="">
+<!--      <img src="../assets/logo.png" alt="">-->
     </div>
       <div>
             <el-form ref="form" :model="form" label-width="100px">
@@ -17,6 +17,9 @@
                   <el-radio disabled :label="男">男</el-radio>
                   <el-radio disabled :label="女">女</el-radio>
                 </el-radio-group>
+              </el-form-item>
+              <el-form-item label="班期">
+                <el-input readonly v-model="form.cname" style="width: 65%"></el-input>
               </el-form-item>
               <el-form-item label="出生日期">
                 <el-date-picker type="date" placeholder="选择日期" readonly style="width: 65%"
@@ -71,7 +74,8 @@
           idNum:'',
           school:'',
           major:'',
-          remarks:''
+          remarks:'',
+          cname:''
         }
       }
     },
@@ -80,9 +84,12 @@
         var empno = this.$store.state.uid;
         axios.get("http://localhost:8080/getMessage/" + empno).then(res =>{
           this.form = res.data;
+          var class_num = res.data.class_num;
+          this.$store.dispatch("setClassNo",class_num);
         })
       },
       onSubmit:function () {
+        alert(this.form.class_num)
         this.$message("修改成功！")
       }
     },
