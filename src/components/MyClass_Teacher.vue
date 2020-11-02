@@ -17,7 +17,6 @@
           empty-text="当前班级无学员"
           :data="studentTable"
           height="250"
-          border
           style="width: 100%">
           <el-table-column
             prop="empno"
@@ -28,6 +27,13 @@
             prop="ename"
             label="学员姓名"
           >
+          </el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                @click="handleEdit(scope.$index, scope.row)">查看</el-button>
+            </template>
           </el-table-column>
 
 
@@ -52,7 +58,8 @@
     <el-table-column
       prop="cno"
       label="班级编号"
-      width="180">
+      width="180"
+    >
     </el-table-column>
     <el-table-column
       prop="cname"
@@ -91,19 +98,24 @@
           studentTable:[]
         }
       },
+      watch:{
+
+      },
       methods: {
 
         getClassByTeacher: function () {
-          var uid = this.$store.state.uid;
+          var uid = 1000;
           axios.get("http://localhost:8080/showClass/"+uid).then(res => {
             this.tableData=res.data;
           })
         },
         getStudentByClass:function () {
-          var cls = 1;
+          var cls = 1
           axios.get("http://localhost:8080/showStudent/"+cls).then(res =>{
             this.studentTable=res.data;
           })
+        },
+        handleShowInfo(index,row){
         }
 
       },
