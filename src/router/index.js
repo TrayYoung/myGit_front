@@ -13,7 +13,7 @@ import ClassAdministration from "@/components/ClassAdministration";
 import StudentAdministration from "@/components/StudentAdministration";
 import TeacherAdministration from "@/components/TeacherAdministration";
 import ClerkAdministration from "@/components/ClerkAdministration";
-import ManagerAdministration from "@/components/ManagerAdministration";
+import DeptAdministration from "@/components/DeptAdministration";
 import ResetPassword from "@/components/ResetPassword";
 
 import ChangePwd from "@/components/ChangePwd";
@@ -31,7 +31,8 @@ import Regular_2 from "@/components/Regular_2";
 import Regular_3 from "@/components/Regular_3";
 import SchoolComment from "@/components/SchoolComment";
 import TeachersStyle from "@/components/TeachersStyle";
-
+import CourseAdministration from "@/components/CourseAdministration";
+import CommentAdministration from "@/components/CommentAdministration";
 
 
 
@@ -90,9 +91,9 @@ export default new Router({
           name:'ClerkAdministration',
           component:ClerkAdministration
         }, {
-          path:'/managerAdministration',
-          name:'ManagerAdministration',
-          component:ManagerAdministration
+          path:'/deptAdministration',
+          name:'DeptAdministration',
+          component:DeptAdministration
         }, {
           path:'/resetPassword',
           name:'ResetPassword',
@@ -165,6 +166,14 @@ export default new Router({
           path:'/teachersStyle',
           name:'TeachersStyle',
           component:TeachersStyle
+        },{
+          path:'/courseAdministration',
+          name:'CourseAdministration',
+          component:CourseAdministration
+        },{
+          path:'/commentAdministration',
+          name:'CommentAdministration',
+          component:CommentAdministration
         }
       ]
     }

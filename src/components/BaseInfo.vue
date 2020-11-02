@@ -77,7 +77,7 @@
     },
     methods:{
       getStuMessage:function () {
-        var empno = 10001;
+        var empno = this.$store.state.uid;
         axios.get("http://localhost:8080/getMessage/" + empno).then(res =>{
           this.form = res.data;
         })
