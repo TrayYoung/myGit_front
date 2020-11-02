@@ -89,6 +89,7 @@
         })
       },
       onSubmit:function () {
+        alert(this.form.class_num)
         this.$message("修改成功！")
       }
     },

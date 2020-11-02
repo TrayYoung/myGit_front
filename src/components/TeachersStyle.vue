@@ -69,7 +69,6 @@
             this.$message('点个赞了')
           },
         getTeaMessage:function () {
-            debugger
           var class_num = this.$store.state.classNo;
           axios.get("http://localhost:8080/getTeacherMessage/" + class_num).then(res =>{
             this.form = res.data;
