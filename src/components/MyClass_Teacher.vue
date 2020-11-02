@@ -1,13 +1,13 @@
 <template>
-  <div>
+ <!-- <div>
   <div>
     <h1>我的班级</h1>
-  </div>
+  </div>-->
 
 <div>
 
 
-  <el-table
+  <!--<el-table
     :data="tableData"
     height="250"
     border
@@ -40,13 +40,13 @@
 
   </el-table>
 
-  </div>
+  </div>-->
   </div>
 </template>
 
 
 <script>
-  import axios from 'axios';
+  /*import axios from 'axios';
     export default {
         name: "MyClass_Teacher",
       data() {
@@ -69,7 +69,7 @@
     $(function () {
       $("#view").click(function () {;
       })
-    })
+    })*/
 </script>
 
 <style scoped>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-table
+<!--    <el-table
       :data="tableData"
       border
       style="width: 100%">
@@ -70,12 +70,12 @@
           <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
         </template>
       </el-table-column>
-    </el-table>
+    </el-table>-->
   </div>
 </template>
 
 <script>
-  import axios from 'axios';
+/*  import axios from 'axios';
     export default {
       name: "MyClass_Student",
       methods: {
@@ -97,7 +97,7 @@
       mounted() {
         this.getStudent();
       }
-    }
+    }*/
 </script>
 
 <style scoped>
