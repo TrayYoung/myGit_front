@@ -96,6 +96,12 @@
                           message: '修改密码成功！',
                           type: 'success'
                         });
+                        this.$store.dispatch('setUname', null);
+                        this.$store.dispatch('setUid', null);
+                        this.$store.dispatch('setUpwd', null);
+                        this.$store.dispatch('setUrole', null);
+                        //sessionStorage.setItem('userName', null);
+                        this.$router.push({path: '/'})
                       } else if (res.data === "different") {
                         this.$notify.error({
                           title: '错误',
