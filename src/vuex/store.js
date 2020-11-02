@@ -9,7 +9,8 @@ const store = new Vuex.Store({
     count:0,
     uid:null,
     username:null,
-    password:null
+    password:null,
+    classNo:null
   },
   mutations: { //定义方法：set方法，用于给数据赋值
     setUid:function (state,uid) {
@@ -23,6 +24,9 @@ const store = new Vuex.Store({
     },
     setUpwd:function (state, password) {
       state.password = password;
+    },
+    setClassNo:function (state, classNo) {
+      state.classNo = classNo;
     }
   },
   actions:{
@@ -42,7 +46,10 @@ const store = new Vuex.Store({
     },
     setUpwd:function (context,password) {
       context.commit("setUpwd",password);
+    },
+    setClassNo:function (context,classNo) {
+      context.commit("setClassNo",classNo);
     }
   }
-})
+});
 export default store;
