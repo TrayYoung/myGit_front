@@ -1,11 +1,16 @@
 <template>
   <div>
-            <el-form ref="form" :model="form" label-width="80px">
+    <div style="width: 25%;height: 30%;
+              border: black;float: right;position: fixed;left: 80%">
+      <img src="../assets/logo.png" alt="">
+    </div>
+      <div>
+            <el-form ref="form" :model="form" label-width="100px">
               <el-form-item label="工号：">
-                <el-input v-model="form.empno"></el-input>
+                <el-input readonly v-model="form.empno" style="width: 65%"></el-input>
               </el-form-item>
               <el-form-item label="姓名：">
-                <el-input v-model="form.ename"></el-input>
+                <el-input readonly v-model="form.ename" style="width: 65%"></el-input>
               </el-form-item>
               <el-form-item label="性别">
                 <el-radio-group v-model="form.sex">
@@ -14,11 +19,11 @@
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="出生日期">
-                <el-date-picker type="date" placeholder="选择日期" disabled
-                                v-model="form.birthday" style="width: 100%;"></el-date-picker>
+                <el-date-picker type="date" placeholder="选择日期" readonly style="width: 65%"
+                                v-model="form.birthday"></el-date-picker>
               </el-form-item>
               <el-form-item label="籍贯">
-                <el-input v-model="form.address"></el-input>
+                <el-input readonly v-model="form.address" style="width: 65%"></el-input>
               </el-form-item>
               <el-form-item label="是否婚配">
                 <el-radio-group v-model="form.isMarry">
@@ -27,26 +32,26 @@
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="联系电话">
-                <el-input v-model="form.tel" autocomplete="off"></el-input>
+                <el-input readonly v-model="form.tel" autocomplete="off" style="width: 65%"></el-input>
               </el-form-item>
               <el-form-item label="身份证号">
-                <el-input type="text" v-model="form.idnum"></el-input>
+                <el-input readonly type="text" v-model="form.idNum" style="width: 65%"></el-input>
               </el-form-item>
               <el-form-item label="毕业院校">
-                <el-input type="text" v-model="form.school"></el-input>
+                <el-input readonly type="text" v-model="form.school" style="width: 65%"></el-input>
               </el-form-item>
               <el-form-item label="专业">
-                <el-input type="text" v-model="form.major"></el-input>
+                <el-input readonly type="text" v-model="form.major" style="width: 65%"></el-input>
               </el-form-item>
               <el-form-item label="备注">
-                <el-input type="text" v-model="form.remarks" style="width: 100%"></el-input>
+                <el-input readonly type="textarea" v-model="form.remarks" style="width: 65%"></el-input>
               </el-form-item>
-              <!--<el-form-item>
-                <el-button type="primary" @click="onSubmit">立即创建</el-button>
-                <el-button>取消</el-button>
-              </el-form-item>-->
+              <el-form-item>
+                <el-button type="primary" @click="onSubmit">保存修改</el-button>
+              </el-form-item>
             </el-form>
-  </div>
+      </div>
+    </div>
 </template>
 
 <script>
@@ -63,7 +68,7 @@
           address:'',
           isMarry:'',
           tel:'',
-          idnum:'',
+          idNum:'',
           school:'',
           major:'',
           remarks:''
@@ -72,10 +77,13 @@
     },
     methods:{
       getStuMessage:function () {
-        var empno = 10001;
+        var empno = this.$store.state.uid;
         axios.get("http://localhost:8080/getMessage/" + empno).then(res =>{
           this.form = res.data;
         })
+      },
+      onSubmit:function () {
+        this.$message("修改成功！")
       }
     },
     //生命周期钩子
