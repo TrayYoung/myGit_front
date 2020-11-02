@@ -6,7 +6,8 @@
 
 <script>
     export default {
-        name: "MyClass_Student"
+        name: "MyClass_Student",
+
     }
 </script>
 

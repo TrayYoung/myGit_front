@@ -35,7 +35,7 @@
       },
       methods: {
         getClassByTeacher: function () {
-          var uid = 1000;
+          var uid = this.$store.state.uid;
           axios.get("http://localhost:8080/showCourse/"+uid).then(res => {
             this.tableData=res.data;
           })
