@@ -4,7 +4,7 @@
               border: black;float: right;position: absolute;left: 80%">
       <el-upload
         class="avatar-uploader"
-        action="http://localhost:8080/uploadFile"
+        action="http://localhost:8080/uploadFile/"
         :show-file-list="false"
         :on-success="handleAvatarSuccess"
         :before-upload="beforeAvatarUpload">
@@ -59,7 +59,7 @@
                 <el-input readonly type="textarea" v-model="form.remarks" style="width: 65%"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="onSubmit">保存修改</el-button>
+                <el-button type="primary" @click="onSubmit" style="margin-left: 23%">保存修改</el-button>
               </el-form-item>
             </el-form>
       </div>
@@ -73,8 +73,6 @@
     data(){
       return{
         imageUrl:'',
-        uploadImgServer: 'http://localhost:8080/uploadFile',
-        imgLimit: 1, // 上传照片数
         form:{
           empno:'',
           ename:'',
@@ -86,6 +84,7 @@
           idNum:'',
           school:'',
           major:'',
+          class_num:'',
           remarks:'',
           cname:''
         },
@@ -104,7 +103,6 @@
         })
       },
       handleAvatarSuccess(res, file) {
-        debugger
         this.imageUrl = URL.createObjectURL(file.raw);
       },
       beforeAvatarUpload(file) {
@@ -118,6 +116,45 @@
           this.$message('上传头像图片大小不能超过 2MB!');
         }
         return isJPG && isLt2M;
+      },
+      onSubmit() {
+        this.$refs.form.validate((valid) => {
+          if (valid){
+            //提交
+            this.$confirm('确认修改信息吗?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              var img = this.imageUrl;
+              axios.get("http://localhost:8080/updateEmpMessage/" + this.form +
+                "/" + img).then(res =>{
+                  if ("success" === res.data) {
+                    this.$message({
+                      type: 'success',
+                      message: '修改成功'
+                    });
+                  }else {
+                    this.$message({
+                      type: 'info',
+                      message: '服务器响应失败'
+                    });
+                  }
+              });
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消'
+              });
+            });
+          } else {
+            this.$message({
+              type: 'info',
+              message: '请正确填写'
+            });
+            return false;
+          }
+        })
       }
     },
 

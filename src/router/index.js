@@ -123,7 +123,7 @@ export default new Router({
           name:'MyClass_Teacher',
           component:MyClass_Teacher
         },{
-          path:'/myClassMember/:cno',
+          path:'/myClassMember',
           name:'MyClassMember',
           component:MyClassMember
         },{
