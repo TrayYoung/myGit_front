@@ -47,26 +47,13 @@
           label="所在部门"
           width="100">
         </el-table-column>
-<!--        <el-table-column-->
-<!--          align="center"-->
-<!--          width="150">-->
-<!--          <template slot="header" slot-scope="scope">-->
-<!--            操作-->
-<!--          </template>-->
-<!--          <template slot-scope="scope">-->
-<!--            <el-button-->
-<!--              size="mini"-->
-<!--              @click="handleShowInfo(scope.$index, scope.row)">查看详细信息-->
-<!--            </el-button>-->
-<!--          </template>-->
-<!--        </el-table-column>-->
       </el-table>
       <!--分页器-->
       <el-pagination align='center'
                      @size-change="handleSizeChange"
                      @current-change="handleCurrentChange"
                      :current-page="currentPage"
-                     :page-sizes="[5,10,20]"
+                     :page-sizes="[8,16]"
                      :page-size="pageSize"
                      layout="total, sizes, prev, pager, next, jumper"
                      :total="tableData.length">
@@ -82,7 +69,7 @@
     data() {
       return {
         tableData: [],
-        pagesize: 10,
+        pagesize: 8,
         currpage: 1,
         tableDataName: ""
 
@@ -91,6 +78,7 @@
     },
     methods: {
       getEmpByDeptno: function () {
+
         if (this.tableDataName != "") {
           axios.get("getEmpByDeptnoAndName/1/" + this.tableDataName).then(res => {
             this.tableData = res.data;
