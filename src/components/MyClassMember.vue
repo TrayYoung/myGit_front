@@ -6,8 +6,7 @@
       style="width: 100%">
       <el-table-column type="expand">
         <template slot-scope="props">
-          <el-form :rel="form" :model="form"
-                   label-position="left" inline class="demo-table-expand">
+          <el-form label-position="left" inline class="demo-table-expand">
             <el-form-item label="姓名">
               <span>{{props.row.ename }}</span>
             </el-form-item>
@@ -66,7 +65,7 @@
 <script>
   import axios from 'axios';
     export default {
-      name: "MyClass_Student",
+      name: "myClassMember",
       data() {
         return {
           tableData: []

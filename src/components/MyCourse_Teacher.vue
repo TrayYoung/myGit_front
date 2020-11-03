@@ -19,6 +19,13 @@
           label="课程名称"
           width="180">
         </el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              @click="handleEdit(scope.$index, scope.row)">查看</el-button>
+          </template>
+        </el-table-column>
       </el-table>
     </div>
   </div>
@@ -35,11 +42,14 @@
       },
       methods: {
         getClassByTeacher: function () {
-          var uid = 1000;
+          var uid = this.$store.state.uid;
           axios.get("http://localhost:8080/showCourse/"+uid).then(res => {
             this.tableData=res.data;
           })
         },
+        handleEdit(index,row){
+
+        }
       },
       mounted() {
         this.getClassByTeacher();

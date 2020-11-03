@@ -1,8 +1,17 @@
 <template>
   <div>
-    <div style="width: 25%;height: 30%;
-              border: black;float: right;position: fixed;left: 80%">
-<!--      <img src="../assets/logo.png" alt="">-->
+    <div style="width: 20%;height: 30%;
+              border: black;float: right;position: absolute;left: 80%">
+      <el-upload
+        class="avatar-uploader"
+        action="http://localhost:8080/uploadFile/"
+        :show-file-list="false"
+        :on-success="handleAvatarSuccess"
+        :before-upload="beforeAvatarUpload">
+        <img v-if="imageUrl" :src="imageUrl" class="avatar">
+        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+      </el-upload>
+      <span style="padding-left: 24%">1寸照片</span>
     </div>
       <div>
             <el-form ref="form" :model="form" label-width="100px">
@@ -50,7 +59,7 @@
                 <el-input readonly type="textarea" v-model="form.remarks" style="width: 65%"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="onSubmit">保存修改</el-button>
+                <el-button type="primary" @click="onSubmit" style="margin-left: 23%">保存修改</el-button>
               </el-form-item>
             </el-form>
       </div>
@@ -63,6 +72,7 @@
     name: "BaseInfo",
     data(){
       return{
+        imageUrl:'',
         form:{
           empno:'',
           ename:'',
@@ -74,26 +84,80 @@
           idNum:'',
           school:'',
           major:'',
+          class_num:'',
           remarks:'',
           cname:''
+        },
+        rules:{
+
         }
       }
     },
-    methods:{
-      getStuMessage:function () {
+    methods: {
+      getStuMessage: function () {
         var empno = this.$store.state.uid;
-        axios.get("http://localhost:8080/getMessage/" + empno).then(res =>{
+        axios.get("http://localhost:8080/getMessage/" + empno).then(res => {
           this.form = res.data;
           var class_num = res.data.class_num;
-          this.$store.dispatch("setClassNo",class_num);
+          this.$store.dispatch("setClassNo", class_num);
         })
       },
-      onSubmit:function () {
-        alert(this.form.class_num)
-        this.$message("修改成功！")
+      handleAvatarSuccess(res, file) {
+        this.imageUrl = URL.createObjectURL(file.raw);
+      },
+      beforeAvatarUpload(file) {
+        const isJPG = file.type === 'image/jpeg';
+        const isLt2M = file.size / 1024 / 1024 < 2;
+
+        if (!isJPG) {
+          this.$message('上传头像图片只能是 JPG 格式!');
+        }
+        if (!isLt2M) {
+          this.$message('上传头像图片大小不能超过 2MB!');
+        }
+        return isJPG && isLt2M;
+      },
+      onSubmit() {
+        this.$refs.form.validate((valid) => {
+          if (valid){
+            //提交
+            this.$confirm('确认修改信息吗?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              var img = this.imageUrl;
+              axios.get("http://localhost:8080/updateEmpMessage/" + this.form +
+                "/" + img).then(res =>{
+                  if ("success" === res.data) {
+                    this.$message({
+                      type: 'success',
+                      message: '修改成功'
+                    });
+                  }else {
+                    this.$message({
+                      type: 'info',
+                      message: '服务器响应失败'
+                    });
+                  }
+              });
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消'
+              });
+            });
+          } else {
+            this.$message({
+              type: 'info',
+              message: '请正确填写'
+            });
+            return false;
+          }
+        })
       }
     },
-    //生命周期钩子
+
     mounted(){
       //编译后获取数据
       this.getStuMessage();
@@ -138,5 +202,30 @@
   .box-card {
     width: 100%;
     height: 95%;
+  }
+</style>
+<style>
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
   }
 </style>

@@ -81,38 +81,6 @@
           </el-menu>
         </el-aside>
         <el-main class="main">Main
-          <el-table
-            :data="tableData"
-            style="width: 100%">
-
-            <el-table-column type="expand">
-              <template slot-scope="props">
-                <el-form label-position="left" inline class="demo-table-expand">
-
-                  <el-table :data="tableData2">
-                    <el-table-column
-                    label="编号"
-                    prop="empno">
-                    </el-table-column>
-                  </el-table>
-
-                </el-form>
-              </template>
-            </el-table-column>
-
-            <el-table-column
-              label="班级编号"
-              prop="cno">
-            </el-table-column>
-            <el-table-column
-              label="班级名称"
-              prop="cname">
-            </el-table-column>
-            <el-table-column
-              label="任课教师"
-              prop="ename">
-            </el-table-column>
-          </el-table>
 
         </el-main>
       </el-container>
@@ -124,30 +92,7 @@
   import axios from 'axios';
   export default {
     name: "HomeTeacher",
-    data() {
-      return {
-        tableData: [],
-        tableData2:[],
-      }
-    },
-    methods: {
-      getClassByTeacher: function () {
-        var uid = 1000;
-        axios.get("http://localhost:8080/showClass/"+uid).then(res => {
-          this.tableData=res.data;
-        })
-      },
-      getStuByClass:function () {
-        var cls = 1;
-        axios.get("httpp://localhost:8080/getStudentByClass/"+cls).then(res =>{
-          this.tableData2=res.data;
-        })
-      }
-    },
-    mounted() {
-      this.getClassByTeacher();
-      this.getStuByClass();
-    }
+
 
   };
 

@@ -8,7 +8,7 @@
                   <span>{{ this.form.empno }}</span>
                 </el-form-item>
                 <el-form-item label="姓名">
-                  {{this.form.ename}}
+                  <span>{{this.form.ename}}</span>
                 </el-form-item>
                 <el-form-item label="性别">
                   <span>{{ this.form.sex }}</span>
@@ -54,6 +54,7 @@
             empno:'',
             ename:'',
             sex:'',
+            nation:'',
             birthday:'',
             address:'',
             isMarry:'',
