@@ -31,8 +31,23 @@
           <el-table-column label="操作">
             <template slot-scope="scope">
               <el-button
-                size="mini"
-                @click="handleEdit(scope.$index, scope.row)">查看</el-button>
+                @click="drawer = true" type="primary" style="margin-left: 16px;">查看</el-button>
+              <el-drawer
+                title="我是标题"
+                :visible.sync="drawer"
+                :direction="rtl"
+                :before-close="handleClose">
+                <el-table
+                :data="stuInfo"
+                height="250"
+                >
+
+                  <el-table-column
+                  prop="ename"></el-table-column>
+
+                </el-table>
+
+              </el-drawer>
             </template>
           </el-table-column>
 
@@ -59,6 +74,7 @@
       prop="cno"
       label="班级编号"
       width="180"
+      v-model="asd"
     >
     </el-table-column>
     <el-table-column
@@ -95,7 +111,11 @@
       data() {
         return {
           tableData: [],
-          studentTable:[]
+          studentTable:[],
+          drawer: false,
+          direction: 'rtl',
+          stuInfo:[],
+          asd:1
         }
       },
       watch:{
@@ -103,25 +123,40 @@
       },
       methods: {
 
+
         getClassByTeacher: function () {
-          var uid = 1000;
+          var uid = this.$store.state.uid;
           axios.get("http://localhost:8080/showClass/"+uid).then(res => {
             this.tableData=res.data;
           })
         },
         getStudentByClass:function () {
-          var cls = 1
+          var cls = this.asd;
           axios.get("http://localhost:8080/showStudent/"+cls).then(res =>{
             this.studentTable=res.data;
           })
         },
-        handleShowInfo(index,row){
-        }
+        getStuInfo:function(){
+          var empno = 1000;
+          axios.get("http://localhost:8080/showStuInfo/"+empno).then(res =>{
+            this.stuInfo = res.data;
+          })
+        },
+        handleClose(done) {
+          this.$confirm('确认关闭？')
+            .then(_ => {
+              done();
+            })
+            .catch(_ => {});
+        },
 
+        handleViewInfo(index,row){
+        }
       },
       mounted() {
         this.getClassByTeacher();
         this.getStudentByClass();
+        this.getStuInfo();
       }
     };
 
