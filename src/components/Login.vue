@@ -82,7 +82,7 @@
                 if (res.data == null || res.data == ""){
                   this.$notify.error({
                     title: '错误',
-                    message: '密码错误！',
+                    message: '账号或密码错误！',
                     type: 'error'
                   });
                 } else {
