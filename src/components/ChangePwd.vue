@@ -54,6 +54,15 @@
             callback()
           }
         };
+        var validatePass3 = (rule, value, callback) => {
+          if (value === '') {
+            callback(new Error('请输入新密码'))
+          } else if (value === this.form.o_password) {
+            callback(new Error('密码没有变化，请重新输入!'))
+          } else {
+            callback()
+          }
+        };
           return{
             form:{
               o_password:'',
@@ -66,7 +75,7 @@
                 {min: 3, max: 16, message: '长度在 3 到 16 个字符', trigger: 'blur' }
               ],
               n_password:[
-                {required: true, message: '请输入新密码', trigger: 'blur'},
+                { required: true, validator: validatePass3, trigger: 'blur' },
                 {min: 3, max: 16, message: '长度在 3 到 16 个字符', trigger: 'blur' }
               ],
               r_password:[
