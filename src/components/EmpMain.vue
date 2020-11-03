@@ -15,6 +15,7 @@
           <el-menu
             default-active="/classAdministration">
             <navigation-item v-for="(menu,i) in adminMenus" :key="i" :item="menu"/>
+
             <el-menu-item style="font-size: 17px;"  @click="exitSys">
               <i class="el-icon-switch-button"></i>
               <span slot="title">退出系统</span>

@@ -12,6 +12,11 @@ import store from './vuex/store';
 import axios from 'axios'
 axios.defaults.baseURL='http://localhost:8080/'
 Vue.prototype.axios = axios
+/*import { Select, Option} from 'element-ui'
+
+
+Vue.use(Select)
+Vue.use(Option)*/
 
 Vue.use(ElementUI);
 Vue.config.productionTip = false;
