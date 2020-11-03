@@ -80,8 +80,17 @@
             axios.get("login/" + this.form.uid + "/" +
               this.form.password).then(res=>{
                 if (res.data == null || res.data == ""){
-                  this.$message("账号或者密码错误")
+                  this.$notify.error({
+                    title: '错误',
+                    message: '密码错误！',
+                    type: 'error'
+                  });
                 } else {
+                  this.$notify({
+                    title: '成功',
+                    message: '登录成功！',
+                    type: 'success'
+                  });
                 var role = res.data.role;
                 var username = res.data.userName;
                 //var password = res.data.password;
@@ -90,32 +99,14 @@
                 //this.$store.dispatch("setUid",this.form.uid);
                   this.$store.dispatch("setRole",role);
                   this.$router.push({path:"/empMain"});
-
-               /* switch (role) {
-                  case 0:
-                    //this.$router.push({path:"/homeAdmin"});
-                    this.$router.push({path:"/homeAdmin"});
-                    break;
-                  case 1:
-                    this.$router.push({path:"/homeStudent"});
-                    break;
-                  case 2:
-                    this.$router.push({path:"/homeTeacher"});
-                    break;
-                  case 3:
-                    this.$router.push({path:"/homeClerk"});
-                    break;
-                  case 4:
-                    this.$router.push({path:"/homeManager"});
-                    break;
-                  default:
-                    this.$message("登陆失败!");
-                    break;
-                }*/
                 }
             })
           } else {
-            alert('信息错误!');
+            this.$notify({
+              title: '警告',
+              message: '信息错误！',
+              type: 'warning'
+            });
             return false;
           }
         })
