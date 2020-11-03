@@ -3,38 +3,76 @@
     <div>
       <h1>班级管理</h1>
       <h1>存放班级的下拉框</h1>
-      <el-dropdown>
-        <el-button type="primary">
-          选择班级<i class="el-icon-arrow-down el-icon--right"></i>
-        </el-button>
-        <el-dropdown-menu  slot="dropdown">
-          <el-dropdown-item
-            @click="showClassInInput(value)"
-            v-for="item in classList"
-            :key="item.cNo"
-            :value="item.cname">
-          {{item.cname}}</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+      <el-row>
+        <el-col :span="8"><div class="grid-content bg-purple">
+          <el-dropdown>
+            <el-button type="primary">
+              选择班级<i class="el-icon-arrow-down el-icon--right"></i>
+            </el-button>
+            <el-dropdown-menu  slot="dropdown" class="project-dropdown">
+              <el-dropdown-item
+                @click.native="showClassInInput(item.cname)"
+                v-for="item in classList"
+                :key="item.cNo"
+                :value="item.cname">
+                {{item.cname}}</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
 
-        <el-input v-model="quiryCname" style="width: 100px" ></el-input>
+          <el-input v-model="queryCname" style="width: 230px" ></el-input>
 
 
-     <!-- <el-form ref="form" :model="form" label-width="80px">
-      <el-form-item label="班级">
-        <el-input v-model=""></el-input>
-      </el-form-item>
-      </el-form>-->
-      <el-select  v-model="value" placeholder="请选择班期">
-        <el-option
-          v-for="item in classList"
-          :key="item.cname"
-          :label="item.cname"
-          :value="item.cname">
-        </el-option>
-      </el-select>
+<!--
+           <el-form ref="form" :model="form" label-width="80px">
+           <el-form-item label="班级">
+             <el-input v-model=""></el-input>
+           </el-form-item>
+           </el-form>-->
 
-      <el-button type="primary" icon="el-icon-search" @click="searchClass()">搜索</el-button>
+
+          <el-button type="primary" icon="el-icon-search" @click="searchClass()">搜索</el-button>
+
+        </div></el-col>
+        <el-col :span="8"><div class="grid-content bg-purple-light">
+          <span style="color: transparent">hh</span><!--占位-->
+        </div></el-col>
+        <el-col :span="8"><div class="grid-content bg-purple">
+          <el-button type="primary" @click="dialog = true">新增班级</el-button>
+        </div></el-col>
+      </el-row>
+
+       <el-drawer
+            title="新建班级"
+            :before-close="handleClose"
+            :visible.sync="dialog"
+            direction="ltr"
+            custom-class="demo-drawer"
+            ref="drawer"
+          >
+            <div class="demo-drawer__content">
+              <el-form :model="form">
+                <el-form-item label="班级名称" :label-width="formLabelWidth">
+                  <el-input v-model="form.name" autocomplete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="教师" :label-width="formLabelWidth">
+                  <el-select  placeholder="请选择教师" clearable filterable><!--@click.native="showClassInInput(item.cname)"-->
+                    <el-option
+                      v-for="item in TeacherList"
+                      :key="item.cname"
+                      :label="item.cname"
+                      :value="item.cname">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-form>
+              <div class="demo-drawer__footer">
+                <el-button @click="cancelForm">取 消</el-button>
+                <el-button type="primary" @click="$refs.drawer.closeDrawer()" :loading="loading">{{ loading ? '提交中 ...' : '确 定' }}</el-button>
+              </div>
+            </div>
+          </el-drawer>
+
+
       <h1>班级列表</h1>
       <el-table
         :data="classByNameList"
@@ -139,17 +177,60 @@
         name: "ClassAdministration",
         data(){
           return{
+            dialog: false,
+            loading: false,
+            form: {
+              name: '',
+              region: '',
+              date1: '',
+              date2: '',
+              delivery: false,
+              type: [],
+              resource: '',
+              desc: ''
+            },
+            formLabelWidth: '80px',
+            timer: null,
+
+
+
             currentPage:1, //初始页
             pagesize:5,    //    每页的数据
             queryCname:'',
             classNum:'',
             className:'1',
             classList:[],
+            TeacherList:[],
             classByNameList:[],
             studentTable:[]
           }
         },
         methods:{
+          handleClose(done) {
+            if (this.loading) {
+              return;
+            }
+            this.$confirm('确定要提交表单吗？')
+              .then(_ => {
+                this.loading = true;
+                this.timer = setTimeout(() => {
+                  done();
+                  // 动画关闭需要一定的时间
+                  setTimeout(() => {
+                    this.loading = false;
+                  }, 400);
+                }, 2000);
+              })
+              .catch(_ => {});
+          },
+          cancelForm() {
+            this.loading = false;
+            this.dialog = false;
+            clearTimeout(this.timer);
+          },
+
+
+
           handleDetail:function(index,data){
             var cNo=data.cNo;
 
@@ -174,11 +255,16 @@
               this.classList = res.data;
             });
           },
+          getTeacherListForSelect:function(){
+            axios.get("/getTeacherListForSelect").then(res => {
+              this.classList = res.data;
+            });
+          },
           getStudentInOneClass:function () {
 
           },
           showClassInInput:function (val) {
-            this.quiryCname=val;
+            this.queryCname=val;
           },
           getClassListByName:function () {
             if (this.queryCname==""){
@@ -208,5 +294,9 @@
 </script>
 
 <style scoped>
-
+  .project-dropdown{
+    width: 100px;
+    height:200px;
+    overflow: auto;
+  }
 </style>
