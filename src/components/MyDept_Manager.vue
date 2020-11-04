@@ -102,7 +102,8 @@
       },
       handleShowInfo(index, row) {
 
-      }
+      },
+
 
     },
     mounted() {
