@@ -102,8 +102,8 @@
         axios.get("http://localhost:8080/getMessage/" + empno).then(res => {
           this.form = res.data;
           this.imageUrl = this.form.img;
-          var class_num = res.data.class_num;
-          this.$store.dispatch("setClassNo", class_num);
+          var classNo = res.data.class_num;
+          this.$store.dispatch("setClassNo", classNo);
         })
       },
       onSubmit() {
@@ -133,6 +133,7 @@
                   }
               });
             }).catch(() => {
+              alert(this.$store.state.classNo)
               this.$message({
                 type: 'info',
                 message: '已取消'
