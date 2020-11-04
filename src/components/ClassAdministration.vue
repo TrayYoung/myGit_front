@@ -171,7 +171,7 @@
         </el-form>
         <div class="demo-drawer__footer">
 
-          <el-button type="primary" @click="confirmEditClass">确 定</el-button>
+          <el-button type="primary" @click="dialogEdit=true">确 定</el-button>
           <el-button @click="cancelForm">取 消</el-button>
 
         </div>
@@ -202,9 +202,11 @@
         <span style="color: transparent">hh</span>
       </div></el-col>
       <el-col :span="8"><div class="grid-content bg-purple">
-        <el-button type="primary" @click="dialog = true">新增学生</el-button>
+        <el-button type="primary" @click="handleAddStudent">新增学生</el-button>
       </div></el-col>
     </el-row>
+
+
     <div>
       <el-dialog
         title="提示"
@@ -222,14 +224,136 @@
          :visible.sync="dialogEdit"
          width="30%"
          >
-        <span>确认要将{{className}}的信息进行修改吗？</span>
+        <span>确认要将{{this.formEditClass.cname}}的信息进行修改吗？</span>
         <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="confirmEditClass">确 定</el-button>
         <el-button @click="dialogEdit = false">取 消</el-button>
         </span>
-         </el-dialog>
-        </div>
+       </el-dialog>
+      <el-dialog
+        title="修改"
+        :visible.sync="dialogEditStudent"
+        width="30%"
+      >
+        <span>确认要将{{this.formEditStudent.ename}}的信息进行修改吗？</span>
+        <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="confirmEditStudent">确 定</el-button>
+        <el-button @click="dialogEditStudent = false">取 消</el-button>
+        </span>
+      </el-dialog>
+      <el-dialog
+        title="新增"
+        :visible.sync="dialogAddStudent"
+        width="30%"
+      >
+        <span>确认要将{{this.formAddStudent.ename}}添加进{{this.formAddStudent.cname}}吗？</span>
+        <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="confirmAddStudent">确 定</el-button>
+        <el-button @click="dialogAddStudent = false">取 消</el-button>
+        </span>
+      </el-dialog>
+      <el-dialog
+        title="删除"
+        :visible.sync="dialogDeleteStudent"
+        width="30%"
+      >
+        <span>确认要将{{this.formDeleteStudent.ename}}从{{this.formDeleteStudent.cname}}删除吗？</span>
+        <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="confirmDeleteStudent">确 定</el-button>
+        <el-button @click="dialogDeleteStudent = false">取 消</el-button>
+        </span>
+      </el-dialog>
+    </div>
 
+
+    <el-drawer
+      title="新增班级成员"
+      :visible.sync="drawerAddStudent"
+      direction="ltr"
+      custom-class="demo-drawer"
+      ref="drawer"
+    >
+      <div class="demo-drawer__content">
+        <el-form :model="form">
+          <el-form-item
+            label="班级id"
+            :label-width="formLabelWidth">
+            <el-input v-model="formAddStudent.class_num" autocomplete="off" style="width: 230px" readonly></el-input>
+          </el-form-item>
+          <el-form-item
+            label="班级"
+            :label-width="formLabelWidth">
+            <el-input v-model="formAddStudent.cname" autocomplete="off" style="width: 230px" readonly></el-input>
+          </el-form-item>
+          <el-form-item label="学生" :label-width="formLabelWidth">
+            <el-select  v-model="formAddStudent.empno"  placeholder="请选择学生" clearable filterable><!--@click.native="showClassInInput(item.cname)"-->
+              <el-option
+                @click.native="setStudentId(item.ename,item.empno)"
+                v-for="item in studentsToAddList"
+                :key="item.empno"
+                :label="item.ename"
+                :value="item.empno">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item
+            label="学生id"
+            :label-width="formLabelWidth">
+            <el-input v-model="formAddStudent.empno" style="width: 230px" readonly></el-input>
+          </el-form-item>
+        </el-form>
+        <div class="demo-drawer__footer">
+
+          <el-button type="primary" @click="dialogAddStudent=true">确 定</el-button>
+          <el-button @click="cancelForm">取 消</el-button>
+
+        </div>
+      </div>
+    </el-drawer>
+    <el-drawer
+      title="修改班级学生"
+      :visible.sync="drawerStudent"
+      direction="ltr"
+      custom-class="demo-drawer"
+      ref="drawer"
+    >
+      <div class="demo-drawer__content">
+        <el-form :model="form">
+          <el-form-item
+            label="学生id"
+            :label-width="formLabelWidth">
+            <el-input v-model="formEditStudent.empno" style="width: 230px" readonly></el-input>
+          </el-form-item>
+          <el-form-item
+            label="学生姓名"
+            :label-width="formLabelWidth">
+            <el-input v-model="formEditStudent.ename" autocomplete="off" style="width: 230px" readonly></el-input>
+          </el-form-item>
+          <el-form-item label="班级" :label-width="formLabelWidth">
+            <el-select  v-model="formEditStudent.class_num"  placeholder="请选择班级" clearable filterable readonly><!--@click.native="showClassInInput(item.cname)"-->
+              <el-option
+                @click.native="setTeacherId1(item.empno)"
+                v-for="item in classList"
+                :key="item.cNo"
+                :label="item.cname"
+                :value="item.cNo">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item
+            label="班级id"
+            :label-width="formLabelWidth">
+            <el-input v-model="formEditStudent.class_num" autocomplete="off" style="width: 230px" readonly></el-input>
+          </el-form-item>
+        </el-form>
+        <div class="demo-drawer__footer">
+
+          <el-button type="primary" @click="dialogEditStudent=true">确 定</el-button>
+          <el-button @click="cancelForm">取 消</el-button>
+
+        </div>
+      </div>
+    </el-drawer>
     <div>
       <h1>此班级的学生列表</h1>
       <el-table
@@ -256,11 +380,11 @@
             <el-button
               size="mini"
               type="primary"
-              @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+              @click="handleEditStudent(scope.$index, scope.row)">编辑</el-button>
             <el-button
               size="mini"
               type="danger"
-              @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+              @click="handleDeleteStudent(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -275,8 +399,13 @@
         name: "ClassAdministration",
         data(){
           return{
-            dialogEdit:false,
-            drawerEdit:false,
+            dialogDeleteStudent:false,
+            dialogAddStudent:false,
+            drawerAddStudent:false,
+            dialogEditStudent:false,//
+            dialogEdit:false,//
+            drawerEdit:false,//编辑班级
+            drawerStudent:false,
             dialog: false,
             dialog1: false,
             loading: false,
@@ -298,6 +427,24 @@
               teacherId:'',
               tName:''
             },
+            formEditStudent:{
+              empno:'',
+              ename:'',
+              cname:'',
+              class_num:'',
+            },
+            formAddStudent:{
+              class_num:'',
+              cname:'',
+              empno:'',
+              ename:'',
+            },
+            formDeleteStudent:{
+              class_num:'',
+              cname:'',
+              empno:'',
+              ename:'',
+            },
             formLabelWidth: '90px',
             timer: null,
 
@@ -310,13 +457,36 @@
             classNum:'',//班期
             teacherId:'',//班级教师工号
             className:'',
+
             classList:[],
             teacherList:[],
+            studentsToAddList:[],//未分配班级的学生列表
             classByNameList:[],
             studentTable:[]
           }
         },
         methods:{
+          handleDeleteStudent:function(index,row){
+            this.dialogDeleteStudent=true;
+            this.formDeleteStudent.empno=row.empno;
+            this.formDeleteStudent.ename=row.ename;
+            this.formDeleteStudent.cname=this.className;
+
+          },
+          handleAddStudent:function(index,row){
+            this.drawerAddStudent=true;
+            this.formAddStudent.class_num=this.classNum;
+            this.formAddStudent.cname=this.className;
+
+          },
+          handleEditStudent:function(index,row){
+            this.drawerStudent=true;
+            this.formEditStudent.empno=row.empno;
+            this.formEditStudent.ename=row.ename;
+            this.formEditStudent.class_num=this.classNum;
+            this.formEditStudent.cname=row.cname;
+
+          },
           handleEditClass:function(index,row){
             this.drawerEdit=true;
             this.formEditClass.class_num=row.cNo;
@@ -354,6 +524,92 @@
               }
             });
           },
+          confirmEditStudent:function(){
+            axios({
+              //formdata提交
+              method: 'post',
+              url: '/editStudent',
+              data: this.formEditStudent
+            }).then((res) => {
+                if (res.data=='学生更新成功'){
+                  this.drawerStudent=false;
+                  this.dialogEditStudent=false;
+                  this.getClassMemberByCNo(this.classNum);
+                  this.getClassListByName();
+                  this.$notify({
+                    title: 'success',
+                    message: '学生修改成功！',
+                    type: 'success',
+                    position:'top-left'
+                  });
+
+                } else {
+                  this.$notify.error({
+                    title: 'error',
+                    message: '修改失败！',
+                    type: 'error',
+                    position:'top-left'
+                  });
+                }
+            });
+          },
+          confirmAddStudent:function(){
+            axios({
+              //formdata提交
+              method: 'post',
+              url: '/addStudentToOneClass',
+              data: this.formAddStudent
+            }).then((res) => {
+              if (res.data=='新增成员成功'){
+                this.drawerAddStudent=false;
+                this.dialogAddStudent=false;
+                this.getClassMemberByCNo(this.classNum);
+                this.getClassListByName();
+                this.getStudentsToAddListForSelect();
+                this.formAddStudent.ename='';
+                this.formAddStudent.empno='';
+                this.$notify({
+                  title: 'success',
+                  message: '新增成员成功！',
+                  type: 'success',
+                  position:'top-left'
+                });
+
+              } else {
+                this.$notify.error({
+                  title: 'error',
+                  message: '修改失败！',
+                  type: 'error',
+                  position:'top-left'
+                });
+              }
+            });
+          },
+          confirmDeleteStudent:function(){
+            axios.get("/deleteStudentFromOneClass/"+this.formDeleteStudent.empno).then(res => {
+              if (res.data=='删除成员成功'){
+                this.dialogDeleteStudent=false;
+                this.getClassMemberByCNo(this.classNum);
+                this.getClassListByName();
+                this.getStudentsToAddListForSelect();
+                this.$notify({
+                  title: 'success',
+                  message: '已将'+this.formDeleteStudent.ename+'从'+this.formDeleteStudent.cname+'删除',
+                  type: 'success',
+                  position:'top-left'
+                });
+
+              } else {
+                this.$notify.error({
+                  title: 'error',
+                  message: '删除失败！',
+                  type: 'error',
+                  position:'top-left'
+                });
+              }
+
+            });
+          },
 
     /* handleClose(done) {
        this.$confirm('确认关闭？')
@@ -368,12 +624,16 @@
           setTeacherId1:function(val){
             this.formEditClass.teacherId=val;
           },
+          setStudentId:function(val,val2){
+            this.formAddStudent.ename=val;
+            this.formAddStudent.empno=val2;
+          },
           addClass:function(){
             axios.get("/addClass/"+this.form.name+"/"+this.form.teacherId).then(res => {
               if (res.data=='班级新增成功'){
                 this.dialog1=false;
                 this.dialog=false;
-                this.getClassListByName();
+                this.getClassMemberByCNo();
                 this.$notify({
                   title: 'success',
                   message: '班级新增成功！',
@@ -455,6 +715,11 @@
               this.teacherList = res.data;
             });
           },
+          getStudentsToAddListForSelect:function(){
+            axios.get("/getStudentsToAddListForSelect").then(res => {
+              this.studentsToAddList = res.data;
+            });
+          },
           getStudentInOneClass:function () {
 
           },
@@ -489,6 +754,7 @@
           this.getClassListForSelect();
           this.getTeacherListForSelect();
           this.getClassListByName();
+          this.getStudentsToAddListForSelect();
         }
     }
 </script>
