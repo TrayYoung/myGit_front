@@ -14,8 +14,7 @@
         <el-aside width="250px" style="background-color: rgb(238, 241, 246);height: 85vh">
           <el-menu
             default-active="/classAdministration">
-            <navigation-item v-for="(menu,i) in adminMenus" :key="i" :item="menu"/>
-
+            <navigation-item v-for="(menu,i) in adminMenus" :key="i" :item="menu" />
             <el-menu-item style="font-size: 17px;"  @click="exitSys">
               <i class="el-icon-switch-button"></i>
               <span slot="title">退出系统</span>
@@ -100,19 +99,6 @@
     </el-container>-->
   </div>
 </template>
-
-<!--<style>
-/*
-  .el-header {
-    background-color: #B3C0D1;
-    color: #333;
-    line-height: 60px;
-  }
-
-  .el-aside {
-    color: #333;
-  }*/
-</style>-->
 <script>
   import axios from 'axios';
   import NavigationItem from "./NavigationItem"; //引入菜单
@@ -139,9 +125,9 @@
           callback();
         }
       };*/
-
       return {
         adminMenus: [],
+        firstPath:''
       /*  userForm: {
           uname: '',
           password: '',
@@ -312,10 +298,13 @@
       }
     },
     methods: {
+      selectFirstPath:function(){
+        this.firstPath=this.adminMenus[0].path;
+      },
       getMenu() {
           axios.get('getMenu/' + this.$store.state.role).then(res => {
           this.adminMenus = res.data;
-
+          this.firstPath=res.data[0].path;
         })
       },
 

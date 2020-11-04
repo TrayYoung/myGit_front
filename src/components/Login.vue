@@ -80,7 +80,7 @@
             axios.get("login/" + this.form.uid + "/" +
               this.form.password).then(res=>{
                 if (res.data == null || res.data == ""){
-                  this.$notify.error({
+                  this.$notify({
                     title: '错误',
                     message: '账号或密码错误！',
                     type: 'error'
