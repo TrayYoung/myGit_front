@@ -2,7 +2,6 @@
   <div>
     <div>
       <h1>班级管理</h1>
-      <h1>存放班级的下拉框</h1>
       <el-row>
         <el-col :span="8"><div class="grid-content bg-purple">
           <el-dropdown>
@@ -20,15 +19,12 @@
           </el-dropdown>
 
           <el-input v-model="queryCname" style="width: 230px" ></el-input>
-
-
 <!--
            <el-form ref="form" :model="form" label-width="80px">
            <el-form-item label="班级">
              <el-input v-model=""></el-input>
            </el-form-item>
            </el-form>-->
-
 
           <el-button type="primary" icon="el-icon-search" @click="searchClass()">搜索</el-button>
 
@@ -43,7 +39,6 @@
 
        <el-drawer
             title="新建班级"
-            :before-close="handleClose"
             :visible.sync="dialog"
             direction="ltr"
             custom-class="demo-drawer"
@@ -51,23 +46,33 @@
           >
             <div class="demo-drawer__content">
               <el-form :model="form">
-                <el-form-item label="班级名称" :label-width="formLabelWidth">
-                  <el-input v-model="form.name" autocomplete="off"></el-input>
+                <el-form-item
+                  label="班级名称"
+                  :label-width="formLabelWidth">
+                  <el-input v-model="form.name" autocomplete="off" style="width: 230px"></el-input>
                 </el-form-item>
                 <el-form-item label="教师" :label-width="formLabelWidth">
-                  <el-select  placeholder="请选择教师" clearable filterable><!--@click.native="showClassInInput(item.cname)"-->
+                  <el-select  v-model="form.teacherId"  placeholder="请选择教师" clearable filterable><!--@click.native="showClassInInput(item.cname)"-->
                     <el-option
-                      v-for="item in TeacherList"
-                      :key="item.cname"
-                      :label="item.cname"
-                      :value="item.cname">
+                      @click="setTeacherId(item.empno)"
+                      v-for="item in teacherList"
+                      :key="item.empno"
+                      :label="item.ename"
+                      :value="item.empno">
                     </el-option>
                   </el-select>
                 </el-form-item>
+                <el-form-item
+                  label="教师id"
+                  :label-width="formLabelWidth">
+                  <el-input v-model="form.teacherId" style="width: 230px" readonly></el-input>
+                </el-form-item>
               </el-form>
               <div class="demo-drawer__footer">
+
+                <el-button type="primary" @click="addClass">确 定</el-button>
                 <el-button @click="cancelForm">取 消</el-button>
-                <el-button type="primary" @click="$refs.drawer.closeDrawer()" :loading="loading">{{ loading ? '提交中 ...' : '确 定' }}</el-button>
+
               </div>
             </div>
           </el-drawer>
@@ -101,13 +106,14 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
+
               size="mini"
               type="primary"
               @click="handleDetail(scope.$index, scope.row)">详情</el-button>
             <el-button
               size="mini"
               type="primary"
-              @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+              @click="handleEditClass(scope.$index, scope.row)">编辑</el-button>
             <el-button
               size="mini"
               type="danger"
@@ -124,13 +130,105 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="classList.length">
       </el-pagination>
-      <h1>新增班级</h1>
-      <h1>删除班级</h1>
     </div>
 
+
+    <el-drawer
+      title="修改班级"
+      :visible.sync="drawerEdit"
+      direction="ltr"
+      custom-class="demo-drawer"
+      ref="drawer"
+    >
+      <div class="demo-drawer__content">
+        <el-form :model="form">
+          <el-form-item
+            label="班级id"
+            :label-width="formLabelWidth">
+            <el-input v-model="formEditClass.class_num" autocomplete="off" style="width: 230px" readonly></el-input>
+          </el-form-item>
+          <el-form-item
+            label="班级名称"
+            :label-width="formLabelWidth">
+            <el-input v-model="formEditClass.cname" autocomplete="off" style="width: 230px"></el-input>
+          </el-form-item>
+          <el-form-item label="教师" :label-width="formLabelWidth">
+            <el-select  v-model="formEditClass.tName"  placeholder="请选择教师" clearable filterable readonly><!--@click.native="showClassInInput(item.cname)"-->
+              <el-option
+                @click.native="setTeacherId1(item.empno)"
+                v-for="item in teacherList"
+                :key="item.empno"
+                :label="item.ename"
+                :value="item.empno">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item
+            label="教师id"
+            :label-width="formLabelWidth">
+            <el-input v-model="formEditClass.teacherId" style="width: 230px" readonly></el-input>
+          </el-form-item>
+        </el-form>
+        <div class="demo-drawer__footer">
+
+          <el-button type="primary" @click="confirmEditClass">确 定</el-button>
+          <el-button @click="cancelForm">取 消</el-button>
+
+        </div>
+      </div>
+    </el-drawer>
+
+    <h1>修改班级教师</h1>
+    <el-row>
+      <el-col :span="11"><div class="grid-content bg-purple">
+        <el-dropdown>
+          <el-button type="primary">
+            选择教师<i class="el-icon-arrow-down el-icon--right"></i>
+          </el-button>
+          <el-dropdown-menu  slot="dropdown" class="project-dropdown">
+            <el-dropdown-item
+              @click.native="showTeacherInInput(item.ename,item.empno)"
+              v-for="item in teacherList"
+              :key="item.empno"
+              :value="item.ename">
+              {{item.ename}}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <el-input v-model="teacherId" style="width: 200px" readonly></el-input>
+        <el-input v-model="queryTname" style="width: 200px" readonly></el-input>
+        <el-button type="primary" @click="dialog1 = true">修改教师</el-button>
+      </div></el-col>
+      <el-col :span="5"><div class="grid-content bg-purple-light">
+        <span style="color: transparent">hh</span>
+      </div></el-col>
+      <el-col :span="8"><div class="grid-content bg-purple">
+        <el-button type="primary" @click="dialog = true">新增学生</el-button>
+      </div></el-col>
+    </el-row>
     <div>
-      <h1>此班级的任课教师</h1>
-    </div>
+      <el-dialog
+        title="提示"
+        :visible.sync="dialog1"
+        width="30%"
+        >
+        <span>确认要将{{className}}的主管教师修改为{{queryTname}}吗？</span>
+        <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="handleChangeTeacher">确 定</el-button>
+        <el-button @click="dialog1 = false">取 消</el-button>
+        </span>
+      </el-dialog>
+       <el-dialog
+         title="修改"
+         :visible.sync="dialogEdit"
+         width="30%"
+         >
+        <span>确认要将{{className}}的信息进行修改吗？</span>
+        <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="confirmEditClass">确 定</el-button>
+        <el-button @click="dialogEdit = false">取 消</el-button>
+        </span>
+         </el-dialog>
+        </div>
 
     <div>
       <h1>此班级的学生列表</h1>
@@ -177,7 +275,10 @@
         name: "ClassAdministration",
         data(){
           return{
+            dialogEdit:false,
+            drawerEdit:false,
             dialog: false,
+            dialog1: false,
             loading: false,
             form: {
               name: '',
@@ -187,9 +288,17 @@
               delivery: false,
               type: [],
               resource: '',
-              desc: ''
+              desc: '',
+              teacher:'',
+              teacherId:''
             },
-            formLabelWidth: '80px',
+            formEditClass:{
+              class_num:'',
+              cname:'',
+              teacherId:'',
+              tName:''
+            },
+            formLabelWidth: '90px',
             timer: null,
 
 
@@ -197,43 +306,129 @@
             currentPage:1, //初始页
             pagesize:5,    //    每页的数据
             queryCname:'',
-            classNum:'',
-            className:'1',
+            queryTname:'',
+            classNum:'',//班期
+            teacherId:'',//班级教师工号
+            className:'',
             classList:[],
-            TeacherList:[],
+            teacherList:[],
             classByNameList:[],
             studentTable:[]
           }
         },
         methods:{
-          handleClose(done) {
-            if (this.loading) {
-              return;
-            }
-            this.$confirm('确定要提交表单吗？')
-              .then(_ => {
-                this.loading = true;
-                this.timer = setTimeout(() => {
-                  done();
-                  // 动画关闭需要一定的时间
-                  setTimeout(() => {
-                    this.loading = false;
-                  }, 400);
-                }, 2000);
-              })
-              .catch(_ => {});
+          handleEditClass:function(index,row){
+            this.drawerEdit=true;
+            this.formEditClass.class_num=row.cNo;
+            this.formEditClass.cname=row.cname;
+            this.formEditClass.tName=row.ename;
+            this.formEditClass.teacherId=row.empno;
+            /*this.classByNameList[index].editeFlag=true;*/
           },
-          cancelForm() {
-            this.loading = false;
-            this.dialog = false;
-            clearTimeout(this.timer);
+          //修改班级信息
+          confirmEditClass:function(){
+            axios({
+              //formdata提交
+              method: 'post',
+              url: '/editClass',
+              data: this.formEditClass
+            }).then((res) => {
+              if (res.data=='班级更新成功'){
+                this.drawerEdit=false;
+                this.dialogEdit=false;
+                this.getClassListByName();
+                this.$notify({
+                  title: 'success',
+                  message: '班级修改成功！',
+                  type: 'success',
+                  position:'top-left'
+                });
+
+              } else {
+                this.$notify.error({
+                  title: 'error',
+                  message: '修改失败！',
+                  type: 'error',
+                  position:'top-left'
+                });
+              }
+            });
           },
 
+    /* handleClose(done) {
+       this.$confirm('确认关闭？')
+         .then(_ => {
+           done();
+         })
+         .catch(_ => {});
+     },*/
+          setTeacherId:function(val){
+            this.form.teacherId=val;
+          },
+          setTeacherId1:function(val){
+            this.formEditClass.teacherId=val;
+          },
+          addClass:function(){
+            axios.get("/addClass/"+this.form.name+"/"+this.form.teacherId).then(res => {
+              if (res.data=='班级新增成功'){
+                this.dialog1=false;
+                this.dialog=false;
+                this.getClassListByName();
+                this.$notify({
+                  title: 'success',
+                  message: '班级新增成功！',
+                  type: 'success',
+                  position:'top-left'
+                });
+
+              } else {
+                this.$notify.error({
+                  title: 'error',
+                  message: '新增失败！',
+                  type: 'error',
+                  position:'top-left'
+                });
+              }
+
+            });
+          },
+          cancelForm() {
+            //this.loading = false;
+            this.dialog = false;
+          },
+          handleChangeTeacher:function(){
+            axios.get("/changeTeacherInOneClass/"+this.classNum+"/"+this.teacherId).then(res => {
+              if (res.data=='老师修改成功'){
+                this.dialog1=false;
+                this.getClassListByName();
+                this.$notify({
+                  title: '更新成功',
+                  message: this.className+'的主管教师修改为'+this.queryTname,
+                  type: 'success',
+                  position:'top-left'
+                });
+
+              } else {
+                this.$notify.error({
+                  title: 'error',
+                  message: '修改失败！',
+                  type: 'error',
+                  position:'top-left'
+                });
+              }
+
+            });
+
+          },
 
 
           handleDetail:function(index,data){
             var cNo=data.cNo;
-
+            var tName=data.ename;
+            this.queryTname=tName;
+            this.className=data.cname;
+            this.classNum=data.cNo;
+            this.teacherId=data.empno;
             this.getClassMemberByCNo(cNo);
           },
           searchClass:function(){
@@ -257,7 +452,7 @@
           },
           getTeacherListForSelect:function(){
             axios.get("/getTeacherListForSelect").then(res => {
-              this.classList = res.data;
+              this.teacherList = res.data;
             });
           },
           getStudentInOneClass:function () {
@@ -265,6 +460,11 @@
           },
           showClassInInput:function (val) {
             this.queryCname=val;
+          },
+          showTeacherInInput:function (val,val2) {
+            this.queryTname=val;
+            this.teacherId=val2;
+
           },
           getClassListByName:function () {
             if (this.queryCname==""){
@@ -278,9 +478,8 @@
             }
           },
           getClassMemberByCNo:function (cNo) {
-
             /**/
-            axios.get("/getClassMemberByCNo/"+cNo).then(res => {
+            axios.get("/getStudentByCno/"+cNo).then(res => {
               this.studentTable=res.data;
             });
 
@@ -288,6 +487,7 @@
         },
         mounted() {
           this.getClassListForSelect();
+          this.getTeacherListForSelect();
           this.getClassListByName();
         }
     }
