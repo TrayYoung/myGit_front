@@ -1,7 +1,7 @@
 <template>
   <div>
-        <el-card style="width:100%;height: 100%;padding-top: 3%;margin-top: 2%">
-          <div class="teaMessage">
+        <el-card style="width:100%;height: 100%">
+          <div class="teaMessage" style="padding-top: 2%">
               <el-form ref="form" :model="form" label-position="left"
                        inline class="demo-table-expand">
                 <el-form-item label="工号">
@@ -36,8 +36,10 @@
                 </el-form-item>
               </el-form>
           </div>
-          <img src="../assets/logo.png" class="image">
-          <div class="bottom clearfix">
+          <div style="width: 120px;height: 120px;padding-top: 1%">
+            <img v-if="imageUrl" :src="imageUrl" style="width: 60vh;height: 40vh;">
+          </div>
+          <div class="bottom clearfix" style="padding-left: 80%">
             <el-button type="text" class="button" @click="giveup()">点赞</el-button>
           </div>
         </el-card>
@@ -50,6 +52,7 @@
         name: "TeachersStyle",
       data() {
         return {
+          imageUrl:'',
           form:{
             empno:'',
             ename:'',
@@ -73,6 +76,7 @@
           var class_num = this.$store.state.classNo;
           axios.get("http://localhost:8080/getTeacherMessage/" + class_num).then(res =>{
             this.form = res.data;
+            this.imageUrl = this.form.img;
           });
         },
       },
