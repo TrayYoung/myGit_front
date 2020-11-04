@@ -14,48 +14,48 @@
       <span style="padding-left: 24%">1寸照片</span>
     </div>
       <div>
-            <el-form ref="form" :model="form" label-width="100px">
+            <el-form ref="form" :rules="rules" :model="form" label-width="100px">
               <el-form-item label="工号：">
                 <el-input readonly v-model="form.empno" style="width: 65%"></el-input>
               </el-form-item>
-              <el-form-item label="姓名：" prop="name">
-                <el-input v-model="form.ename" style="width: 65%"></el-input>
+              <el-form-item label="姓名：" prop="ename">
+                <el-input v-model.trim="form.ename" style="width: 65%"></el-input>
               </el-form-item>
-              <el-form-item label="性别">
+              <el-form-item label="性别：">
                 <el-radio-group v-model="form.sex">
                   <el-radio label="男">男</el-radio>
                   <el-radio label="女">女</el-radio>
                 </el-radio-group>
               </el-form-item>
-              <el-form-item label="班期">
+              <el-form-item label="班期：">
                 <el-input readonly v-model="form.cname" style="width: 65%"></el-input>
               </el-form-item>
-              <el-form-item label="出生日期">
+              <el-form-item label="出生日期：" prop="birthday">
                 <el-date-picker type="date" placeholder="选择日期" style="width: 65%"
                                 v-model="form.birthday"></el-date-picker>
               </el-form-item>
-              <el-form-item label="籍贯">
+              <el-form-item label="籍贯：" prop="address">
                 <el-input v-model="form.address" style="width: 65%"></el-input>
               </el-form-item>
-              <el-form-item label="是否婚配">
+              <el-form-item label="是否婚配：">
                 <el-radio-group v-model="form.isMarry">
                   <el-radio label="是">是</el-radio>
                   <el-radio label="否">否</el-radio>
                 </el-radio-group>
               </el-form-item>
-              <el-form-item label="联系电话">
-                <el-input v-model="form.tel" autocomplete="off" style="width: 65%"></el-input>
+              <el-form-item label="联系电话：" prop="tel">
+                <el-input v-model.number="form.tel" autocomplete="off" style="width: 65%"></el-input>
               </el-form-item>
-              <el-form-item label="身份证号">
+              <el-form-item label="身份证号：" prop="idNum">
                 <el-input type="text" v-model="form.idNum" style="width: 65%"></el-input>
               </el-form-item>
-              <el-form-item label="毕业院校">
+              <el-form-item label="毕业院校：" prop="school">
                 <el-input type="text" v-model="form.school" style="width: 65%"></el-input>
               </el-form-item>
-              <el-form-item label="专业">
+              <el-form-item label="专业：" prop="major">
                 <el-input type="text" v-model="form.major" style="width: 65%"></el-input>
               </el-form-item>
-              <el-form-item label="备注">
+              <el-form-item label="备注：">
                 <el-input type="textarea" v-model="form.remarks" style="width: 65%"></el-input>
               </el-form-item>
               <el-form-item>
@@ -71,6 +71,16 @@
   export default {
     name: "BaseInfo",
     data(){
+      var checkIdNum = (rule, value, callback) => {
+        const reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/
+        if (!value) {
+          return callback(new Error('证件号码不能为空'))
+        } else if (!reg.test(value)) {
+          return callback(new Error('证件号码不正确'))
+        } else {
+          callback()
+        }
+      };
       return{
         imageUrl:'',
         form:{
@@ -90,8 +100,33 @@
           cname:''
         },
         rules:{
-          name:[
-            {required: true, message: '请输入姓名', trigger: 'blur'}
+          ename:[
+            { required: true, message: "请输入姓名", trigger: 'blur'},
+            { min: 2, max: 4,message: "最少两个字符，最多四个", trigger: 'blur'}
+          ],
+          birthday:[
+            { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
+          ],
+          address:[
+            { required: true, message: '请输入籍贯地址', trigger: 'blur' }
+          ],
+          tel:[
+            { required: true, message: '请输入手机号', trigger: 'blur' },
+            {
+              pattern: /^1[345789]\d{9}$/,//验证手机号的正则表达式
+              message: '目前只支持中国大陆的手机号码，请输入正确的数字号码',
+              trigger: 'blur'
+            },
+          ],
+          idNum:[
+            { required: true, message: "请输入身份证号", trigger: "blur" },
+            { validator: checkIdNum, trigger: 'blur' }
+          ],
+          school:[
+            { required: true,message: "请输入毕业院校", trigger: 'blur'}
+          ],
+          major:[
+            { required: true,message:'请输入专业', trigger: 'blur'}
           ]
         }
       }
@@ -133,7 +168,6 @@
                   }
               });
             }).catch(() => {
-              alert(this.$store.state.classNo)
               this.$message({
                 type: 'info',
                 message: '已取消'
