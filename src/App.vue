@@ -6,13 +6,13 @@
 </template>
 
 <script>
-export default {
-  name: 'App'
-}
+  export default {
+    name: 'App'
+  }
 </script>
 
 <style>
-#app {
-  margin-top: 0;
-}
+  #app {
+    margin-top: 0;
+  }
 </style>
