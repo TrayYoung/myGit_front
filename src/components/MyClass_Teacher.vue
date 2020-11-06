@@ -20,8 +20,9 @@
 
       <el-table
         empty-text="当前班级无学员"
-        :data="tableData"
-        height="250"
+        :data="tableData.slice((currpage - 1) * pagesize, currpage * pagesize)"
+        @selection-change="handleSelectionChange"
+        height="450"
         style="width: 100%">
         <el-table-column
           prop="empno"
@@ -48,64 +49,38 @@
             <el-button
               @click="handleViewInfo(scope.$index,scope.row)" type="primary" style="margin-left: 16px;">查看
             </el-button>
-            <!--查看详细信息-->
-            <el-drawer
-              title="我是标题"
-              :visible.sync="drawer"
-              :direction="rtl"
-              :before-close="handleClose">
-              <div>
-                <el-form ref="form" :model="form" label-width="100px">
-                  <el-form-item label="工号：">
-                    <el-input readonly v-model="form.empno" style="width: 65%"></el-input>
-                  </el-form-item>
-                  <el-form-item label="姓名：">
-                    <el-input readonly v-model="form.ename" style="width: 65%"></el-input>
-                  </el-form-item>
-                  <el-form-item label="性别">
-                    <el-radio-group v-model="form.sex">
-                      <el-radio disabled :label="男">男</el-radio>
-                      <el-radio disabled :label="女">女</el-radio>
-                    </el-radio-group>
-                  </el-form-item>
-                  <el-form-item label="班期">
-                    <el-input readonly v-model="form.cname" style="width: 65%"></el-input>
-                  </el-form-item>
-                  <el-form-item label="出生日期">
-                    <el-date-picker type="date" placeholder="选择日期" readonly style="width: 65%"
-                                    v-model="form.birthday"></el-date-picker>
-                  </el-form-item>
-                  <el-form-item label="籍贯">
-                    <el-input readonly v-model="form.address" style="width: 65%"></el-input>
-                  </el-form-item>
-                  <el-form-item label="是否婚配">
-                    <el-radio-group v-model="form.isMarry">
-                      <el-radio disabled :label="是">是</el-radio>
-                      <el-radio disabled :label="否">否</el-radio>
-                    </el-radio-group>
-                  </el-form-item>
-                  <el-form-item label="联系电话">
-                    <el-input readonly v-model="form.tel" autocomplete="off" style="width: 65%"></el-input>
-                  </el-form-item>
-                  <el-form-item label="身份证号">
-                    <el-input readonly type="text" v-model="form.idNum" style="width: 65%"></el-input>
-                  </el-form-item>
-                  <el-form-item label="毕业院校">
-                    <el-input readonly type="text" v-model="form.school" style="width: 65%"></el-input>
-                  </el-form-item>
-                  <el-form-item label="专业">
-                    <el-input readonly type="text" v-model="form.major" style="width: 65%"></el-input>
-                  </el-form-item>
-                </el-form>
-              </div>
-
-
-            </el-drawer>
-            <!--以上为查看内容-->
           </template>
         </el-table-column>
       </el-table>
+      <!--分页-->
+      <el-pagination align='center'
+                     @size-change="handleSizeChange"
+                     @current-change="handleCurrentChange"
+                     :current-page="currentPage"
+                     :page-sizes="[4,8]"
+                     :page-size="pageSize"
+                     layout="total, sizes, prev, pager, next, jumper"
+                     :total="tableData.length">
+      </el-pagination>
 
+
+      <!--查看详细信息-->
+      <el-drawer
+        title="我是标题"
+        :visible.sync="drawer"
+        :direction="rtl"
+        :before-close="handleClose">
+        <div>
+          <el-table
+          :data="tableData2">
+            <el-table-column
+            prop="ename">
+            </el-table-column>
+          </el-table>
+        </div>
+
+      </el-drawer>
+      <!--以上为查看内容-->
 
       <!--外层主表-->
       <!--    <el-table-column
@@ -147,11 +122,15 @@
     data() {
       return {
         tableData: [],
+        tableData2:[],
         drawer: false,
         direction: 'rtl',
         stuInfo: [],
         asd: 1,
         empno1: "",
+
+        pagesize: 5,
+        currpage: 1,
         formInline: {
           empno: '',
           ename: ''
@@ -193,7 +172,7 @@
       getStuInfo: function () {
         var empno = this.empno1;
         axios.get("http://localhost:8080/showStuInfo/" + empno).then(res => {
-          this.form = res.data;;
+          this.tableData2 = res.data;;
         })
       },
       handleClose(done) {
@@ -203,6 +182,15 @@
           })
           .catch(_ => {
           });
+      },
+      handleCurrentChange(cpage) {
+        this.currpage = cpage;
+      },
+      handleSizeChange(psize) {
+        this.pagesize = psize;
+      },
+      handleSelectionChange(val) {
+        console.log(val)
       },
 
 

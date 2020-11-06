@@ -20,15 +20,80 @@
           width="180">
         </el-table-column>
         <el-table-column label="操作">
-          <template>
-            <el-button type="text" @click="open">点击打开 Message Box</el-button>
-          </template>
           <template slot-scope="scope">
-            <el-button type="primary" @click="handleViewInfo(scope.$index,scope.row)">查看</el-button>
+            <el-button type="primary" @click="handleGetScore(scope.$index,scope.row)">查看</el-button>
           </template>
         </el-table-column>
       </el-table>
-      <!--      <el-drawer
+
+
+      <el-dialog title="打分"
+                 :visible.sync="dialogTableVisible"
+                 show-close="false"
+                 width="70%" >
+
+          <el-table
+            :data="tableData2"
+            style="width: 100%"
+            :default-sort="{prop:'score',order:'descending'}">
+            <el-table-column
+              prop="empno"
+              label="工号"
+              width="180"
+              sortable>
+            </el-table-column>
+            <el-table-column
+              prop="ename"
+              label="学员姓名"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="score"
+              label="成绩"
+              width="180"
+              sortable>
+            </el-table-column>
+            <el-table-column >
+              <template slot-scope="scope">
+                <el-button type="primary" @click="setScore(scope.$index,scope.row)">修改</el-button>
+              </template>
+
+            </el-table-column>
+          </el-table>
+        <el-pagination align='center'
+                       @size-change="handleSizeChange"
+                       @current-change="handleCurrentChange"
+                       :current-page="currentPage"
+                       :page-sizes="[4,8]"
+                       :page-size="pageSize"
+                       layout="total, sizes, prev, pager, next, jumper"
+                       :total="tableData2.length">
+        </el-pagination>
+
+        <!--内层 提交成绩-->
+        <el-dialog
+          :visible.sync="dialogFormVisible"
+          append-to-body="true"
+          width="30%">
+          <el-form :model="subScore">
+            <el-form-item>
+              <el-input v-model="subScore.input" placeholder="请输入成绩"
+                        autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="submitForm">提交</el-button>
+            </el-form-item>
+          </el-form>
+        </el-dialog>
+
+
+
+
+
+      </el-dialog>
+
+
+      <!--      <el-drawer handleSetScore(scope.$index,scope.row)
               title="标题"
               :visible.sync="drawer"
               :direction="direction"
@@ -53,52 +118,7 @@
               </el-table>
             </el-drawer>-->
       <!--表单-->
-      <el-drawer
-        title="我嵌套了 Form !"
-        :before-close="handleClose"
-        :visible.sync="dialog"
-        direction="rtl"
-        custom-class="demo-drawer"
-        ref="drawer"
-      >
-        <el-table
-          empty-text="当前班级无学员"
-          :data="tableData2"
-          height="250"
-          style="width: 100%"
-        >
-          <el-table-column
-            prop="ename"
-            label="姓名"
-            sortable
-            width="180">
-          </el-table-column>
-          <el-table-column
-            prop="score"
-            label="成绩"
-            :formatter="formatter">
-          </el-table-column>
-        </el-table>
-        <div class="demo-drawer__content">
-          <el-form :model="form">
-            <el-form-item label="活动名称" :label-width="formLabelWidth">
-              <el-input v-model="form.name" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="活动区域" :label-width="formLabelWidth">
-              <el-select v-model="form.region" placeholder="请选择活动区域">
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-form>
-          <div class="demo-drawer__footer">
-            <el-button @click="cancelForm">取 消</el-button>
-            <el-button type="primary" @click="$refs.drawer.closeDrawer()" :loading="loading">
-              {{ loading ? '提交中 ...' : '确 定' }}
-            </el-button>
-          </div>
-        </div>
-      </el-drawer>
+
 
     </div>
   </div>
@@ -118,19 +138,21 @@
         drawer: false,
         direction: 'rtl',
         tableData2: [],
-        courseids: "",
-        form: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
+
+        courseid: '',
+        score: '',
+        empno_stu: '',
+        empno_tch: this.$store.state.uid,
+        subScore: {
+          input: '',
         },
-        formLabelWidth: '80px',
-        timer: null,
+
+        dialogTableVisible: false,
+        dialogFormVisible: false,
+        pagesize: 5,
+        currpage: 1,
+
+
       }
     },
     methods: {
@@ -139,55 +161,54 @@
           this.tableData = res.data;
         })
       },
+
       getScore: function () {
-        var empno = this.$store.state.uid;
-        var courseid = 1;
+        var empno = this.empno_tch;
+        var courseid = this.courseid;
         axios.get("http://localhost:8080/showScore/" + empno + "/" + courseid).then(res => {
           this.tableData2 = res.data;
         })
       },
-      handleClose(done) {
-        this.$confirm('确认关闭？')
-          .then(_ => {
-            done();
-          })
-          .catch(_ => {
-          });
+
+
+      handleCurrentChange(cpage) {
+        this.currpage = cpage;
       },
-      handleViewInfo(index, row) {
-        this.drawer = true;
-        this.dialog = true;
-        this.courseids = row.courseid;
-        this.getCourse();
+      handleSizeChange(psize) {
+        this.pagesize = psize;
       },
-      handleClose(done) {
-        if (this.loading) {
-          return;
-        }
-        this.$confirm('确定要提交表单吗？')
-          .then(_ => {
-            this.loading = true;
-            this.timer = setTimeout(() => {
-              done();
-              // 动画关闭需要一定的时间
-              setTimeout(() => {
-                this.loading = false;
-              }, 400);
-            }, 2000);
-          })
-          .catch(_ => {
-          });
+      handleSelectionChange(val) {
+        console.log(val)
+      },
+      handleGetScore(index, row) {
+        this.dialogTableVisible = true;
+        this.courseid = row.courseid;
+        this.getScore()
       },
 
-      cancelForm() {
-        this.loading = false;
-        this.dialog = false;
-        clearTimeout(this.timer);
+      setScore:function(){
+        this.dialogFormVisible = true;
+        this.empno_stu = this.row.empno;
+      },
+
+      submitForm: function () {
+        var score = this.subScore.input;
+        var empno_stu = this.empno_stu;
+        var courseid = this.courseid;
+        var empno_tch = this.empno_tch;
+        axios.get("http://localhost:8080/setScore/" + score + "/" + empno_stu + "/" + empno_tch + "/" + courseid).then(res => {
+          if (res.data == "1") {
+            alert("好耶");
+          } else {
+            alert("wtf?")
+          }
+        })
       }
+
+
     },
     mounted() {
       this.getCourse();
-      this.getScore();
     }
   }
 </script>
