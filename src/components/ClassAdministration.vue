@@ -19,12 +19,7 @@
           </el-dropdown>
 
           <el-input v-model="queryCname" style="width: 230px" ></el-input>
-<!--
-           <el-form ref="form" :model="form" label-width="80px">
-           <el-form-item label="班级">
-             <el-input v-model=""></el-input>
-           </el-form-item>
-           </el-form>-->
+
 
           <el-button type="primary" icon="el-icon-search" @click="searchClass()">搜索</el-button>
 
@@ -330,7 +325,7 @@
             <el-input v-model="formEditStudent.ename" autocomplete="off" style="width: 230px" readonly></el-input>
           </el-form-item>
           <el-form-item label="班级" :label-width="formLabelWidth">
-            <el-select  v-model="formEditStudent.class_num"  placeholder="请选择班级" clearable filterable readonly><!--@click.native="showClassInInput(item.cname)"-->
+            <el-select  v-model="formEditStudent.class_num"  placeholder="请选择班级" clearable filterable readonly>
               <el-option
                 @click.native="setTeacherId1(item.empno)"
                 v-for="item in classList"

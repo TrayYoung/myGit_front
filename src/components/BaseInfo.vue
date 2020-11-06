@@ -59,7 +59,7 @@
                 <el-input type="textarea" v-model="form.remarks" style="width: 65%"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="onSubmit" style="margin-left: 23%">保存修改</el-button>
+                <el-button type="primary" @click="onSubmit()" style="margin-left: 23%">保存修改</el-button>
               </el-form-item>
             </el-form>
       </div>
@@ -103,9 +103,6 @@
           ename:[
             { required: true, message: "请输入姓名", trigger: 'blur'},
             { min: 2, max: 4,message: "最少两个字符，最多四个", trigger: 'blur'}
-          ],
-          birthday:[
-            { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
           ],
           address:[
             { required: true, message: '请输入籍贯地址', trigger: 'blur' }
