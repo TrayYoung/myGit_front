@@ -36,16 +36,11 @@
         <el-table-column
           label="评价分项">
           <el-table-column
-            label="评价1"
-            prop="">
-          </el-table-column>
-          <el-table-column
-            label="评价2"
-            prop="">
-          </el-table-column>
-          <el-table-column
-            label="评价3"
-            prop="">
+            v-for="item in commentTableData"
+            :key="item.commentId"
+            :label="item.commentName"
+
+            :prop="item.commentName">
           </el-table-column>
         </el-table-column>
         <el-table-column
@@ -77,7 +72,7 @@
     </el-table>
 
 
-    <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
+    <el-dialog title="打分" :visible.sync="dialogFormVisible">
       <el-form :model="form">
         <el-form-item label="评价1" :label-width="formLabelWidth" prop="score">
           <el-input v-model="form.score1" autocomplete="off"></el-input>
@@ -128,12 +123,7 @@
           score4: '',
           score5: '',
         },
-        // rules: {
-        //   score: [
-        //     {validator: validatepass, trigger: 'blur'}
-        //   ]
-        // },
-        // timer: null,
+        commentTableData: [],
       }
     },
     methods: {
@@ -142,9 +132,14 @@
           this.tableData = res.data;
         })
       },
-      submit(form){
-        this.$refs[form].validate((valid)=>{
-          if (valid){
+      getCommentTableData: function () {
+        axios.get("/getCommentList").then(res => {
+          this.commentTableData = res.data;
+        })
+      },
+      submit(form) {
+        this.$refs[form].validate((valid) => {
+          if (valid) {
 
           }
         })
@@ -185,10 +180,31 @@
     },
     mounted() {
       this.getRegular();
+      this.getCommentTableData();
     }
   }
 </script>
 
 <style scoped>
+  .dialog-gy{
+    height: 80vh;
+    overflow: auto;
 
+  }
+  .div-gy{
+    border: solid 1px #909399;
+  }
+  .bg-gy {
+    color: #909399;
+    font-weight: bold;
+  }
+  .bg-purple-gy {
+    background: #F5F7FA;
+  }
+  .bg-purple-dark {
+    background: #99a9bf;
+  }
+  .grid-content {
+    min-height: 36px;
+  }
 </style>

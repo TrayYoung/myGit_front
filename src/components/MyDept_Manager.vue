@@ -80,11 +80,11 @@
       getEmpByDeptno: function () {
 
         if (this.tableDataName != "") {
-          axios.get("getEmpByDeptnoAndName/1/" + this.tableDataName).then(res => {
+          axios.get("getEmpByDeptnoAndName/"+this.$store.state.uid+"/" + this.tableDataName).then(res => {
             this.tableData = res.data;
           })
         } else {
-          axios.get("getEmpByDeptno/1").then(res => {
+          axios.get("getEmpByDeptno/"+this.$store.state.uid).then(res => {
             this.tableData = res.data;
           })
         }

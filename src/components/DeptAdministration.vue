@@ -136,12 +136,18 @@
           label="所在部门"
           width="100">
         </el-table-column>
+        <el-table-column
+          prop="role"
+          label="职位"
+          width="100">
+        </el-table-column>
+
       </el-table>
       <!--分页器-->
       <el-pagination align='center'
                      @size-change="handleSizeChange1"
                      @current-change="handleCurrentChange1"
-                     :current-page="currentPage"
+                     :current-page="currpage1"
                      :page-sizes="[4,8]"
                      :page-size="pageSize1"
                      layout="total, sizes, prev, pager, next, jumper"
