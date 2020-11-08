@@ -28,7 +28,7 @@
           <span style="color: transparent">hh</span><!--占位-->
         </div></el-col>
         <el-col :span="8"><div class="grid-content bg-purple">
-          <el-button type="primary" @click="dialog = true">新增班级</el-button>
+          <el-button type="primary" @click="dialog = true">新增班级<i class="el-icon-plus"></i></el-button>
         </div></el-col>
       </el-row>
 
