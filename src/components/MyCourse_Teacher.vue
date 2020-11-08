@@ -4,10 +4,11 @@
       <h1>我的课程——教师</h1>
     </div>
     <div>
+
       <el-table
         :data="tableData"
-        height="250"
-        border
+        height="510"
+
         style="width: 100%">
         <el-table-column
           prop="courseid"
@@ -30,7 +31,8 @@
       <el-dialog title="打分"
                  :visible.sync="dialogTableVisible"
                  show-close="false"
-                 width="70%" >
+                 width="70%"
+                  >
 
           <el-table
             :data="tableData2"
@@ -151,7 +153,7 @@
         dialogFormVisible: false,
         pagesize: 5,
         currpage: 1,
-
+        data:''
 
       }
     },
@@ -186,22 +188,19 @@
         this.getScore()
       },
 
-      setScore:function(){
+      setScore(index,row) {
         this.dialogFormVisible = true;
-        this.empno_stu = this.row.empno;
+        this.empno_stu = row.empno;
+
       },
 
       submitForm: function () {
         var score = this.subScore.input;
-        var empno_stu = this.empno_stu;
+        var empno_stu = this.empno_stu ;
         var courseid = this.courseid;
         var empno_tch = this.empno_tch;
         axios.get("http://localhost:8080/setScore/" + score + "/" + empno_stu + "/" + empno_tch + "/" + courseid).then(res => {
-          if (res.data == "1") {
-            alert("好耶");
-          } else {
-            alert("wtf?")
-          }
+          alert(res.data)
         })
       }
 
