@@ -86,7 +86,7 @@
                       :prop="item.commentName"
                       :label-width="formLabelWidth"
         >
-          <el-input placeholder="评分标准为5分制" v-model="item.value"></el-input>
+          <el-input placeholder="评分标准为5分制" v-model="form.data[index]"></el-input>
         </el-form-item>
         <el-form-item label="整体评价分数" :label-width="formLabelWidth">
           <el-input v-model="form.content_score" autocomplete="off" placeholder="评分标准为5分制"></el-input>
@@ -132,7 +132,12 @@
           ename: '',
           content_score: '',
           content_text: '',
-          input1: ''
+          data: {},
+          score1: '',
+          score2: '',
+          score3: '',
+          score4: '',
+          score5: '',
         },
         commentTableData: [],
       }
@@ -156,10 +161,12 @@
         })
       },
       submit: function () {
-        alert(this.form.empno + "" + "");
-        for (var i = 0; i < this.commentTableData.length; i++) {
-          alert(this.commentTableData[i]);
-        }
+        this.form.score1 = this.form.data[0];
+        this.form.score2 = this.form.data[1];
+        this.form.score3 = this.form.data[2];
+        this.form.score4 = this.form.data[3];
+        this.form.score5 = this.form.data[4];
+        alert(this.form.data[0] + "" + this.form.data[1] + "");
         axios({
           method: 'post',
           url: '/commentRegular',
@@ -167,6 +174,14 @@
         }).then(res => {
           alert(res.data);
         })
+        // var abc = JSON.stringify(this.form.data);
+        // axios({
+        //   method: 'post',
+        //   url: '/commentRegular',
+        //   data: {"data": abc}
+        // }).then(res => {
+        //   alert(res.data);
+        // })
       }
 
       // submitForm(formName) {
