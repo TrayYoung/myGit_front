@@ -1,8 +1,9 @@
 <template>
-  <div>
-    <div style="width: 20%;height: 30%;
-              border: black;float: right;position: absolute;left: 80%">
+  <div id="infoBg">
+    <div style="width: 18%;height: 45%;
+              float: right;position: absolute;left: 78%">
       <el-upload
+        style="padding-left: 12%;padding-top: 10%;"
         class="avatar-uploader"
         action="http://localhost:8080/uploadFile/"
         :show-file-list="false"
@@ -11,55 +12,105 @@
         <img v-if="imageUrl" :src="imageUrl" class="avatar">
         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>
-      <span style="padding-left: 24%">1寸照片</span>
+      <span style="padding-left: 25%">1寸照片(点击上传)</span>
+    </div>
+    <div hidden>
+      <el-input type="text" v-model="photo" style="width: 65%"></el-input>
     </div>
       <div>
             <el-form ref="form" :rules="rules" :model="form" label-width="100px">
-              <el-form-item label="工号：">
-                <el-input readonly v-model="form.empno" style="width: 65%"></el-input>
-              </el-form-item>
-              <el-form-item label="姓名：" prop="ename">
-                <el-input v-model.trim="form.ename" style="width: 65%"></el-input>
-              </el-form-item>
-              <el-form-item label="性别：">
-                <el-radio-group v-model="form.sex">
-                  <el-radio label="男">男</el-radio>
-                  <el-radio label="女">女</el-radio>
-                </el-radio-group>
-              </el-form-item>
-              <el-form-item label="班期：">
-                <el-input readonly v-model="form.cname" style="width: 65%"></el-input>
-              </el-form-item>
-              <el-form-item label="出生日期：" prop="birthday">
-                <el-date-picker type="date" placeholder="选择日期" style="width: 65%"
-                                v-model="form.birthday"></el-date-picker>
-              </el-form-item>
-              <el-form-item label="籍贯：" prop="address">
-                <el-input v-model="form.address" style="width: 65%"></el-input>
-              </el-form-item>
-              <el-form-item label="是否婚配：">
-                <el-radio-group v-model="form.isMarry">
-                  <el-radio label="是">是</el-radio>
-                  <el-radio label="否">否</el-radio>
-                </el-radio-group>
-              </el-form-item>
-              <el-form-item label="联系电话：" prop="tel">
-                <el-input v-model.number="form.tel" autocomplete="off" style="width: 65%"></el-input>
-              </el-form-item>
-              <el-form-item label="身份证号：" prop="idNum">
-                <el-input type="text" v-model="form.idNum" style="width: 65%"></el-input>
-              </el-form-item>
-              <el-form-item label="毕业院校：" prop="school">
-                <el-input type="text" v-model="form.school" style="width: 65%"></el-input>
-              </el-form-item>
-              <el-form-item label="专业：" prop="major">
-                <el-input type="text" v-model="form.major" style="width: 65%"></el-input>
-              </el-form-item>
-              <el-form-item label="备注：">
-                <el-input type="textarea" v-model="form.remarks" style="width: 65%"></el-input>
-              </el-form-item>
+              <div>
+                <el-row style="width: 75%;">
+                    <el-col :span="8">
+                      <el-form-item label="工号：" label-width="60px" class="formitem">
+                        <el-input readonly v-model="form.empno"></el-input>
+                      </el-form-item>
+                    </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="姓名：" prop="ename" label-width="70px" class="formitem">
+                      <el-input v-model.trim="form.ename"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="性别：" prop="sex" label-width="80px" class="formitem">
+                      <el-radio-group v-model="form.sex">
+                        <el-radio label="男">男</el-radio>
+                        <el-radio label="女">女</el-radio>
+                      </el-radio-group>
+                    </el-form-item>
+                  </el-col>
+              </el-row>
+            </div>
+              <el-row style="width: 75%;">
+                <el-col :span="11">
+                  <el-form-item label="班期：" class="formitem" label-width="70px">
+                    <el-input readonly v-model="form.cname"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="13">
+                  <el-form-item label="出生日期：" prop="birthday"
+                                label-width="90px" class="formitem">
+                    <el-date-picker type="date" placeholder="选择日期"
+                                    v-model="form.birthday"></el-date-picker>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row style="width: 75%;">
+                <el-col :span="11">
+                  <el-form-item label="联系电话：" prop="tel" class="formitem">
+                    <el-input v-model.number="form.tel" autocomplete="off"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="13">
+                  <el-form-item label="是否婚配：" label-width="130px" class="formitem">
+                    <el-radio-group v-model="form.isMarry">
+                      <el-radio label="是">是</el-radio>
+                      <el-radio label="否">否</el-radio>
+                    </el-radio-group>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="24">
+                  <el-form-item label="籍贯：" prop="address" class="formitem">
+                    <el-input v-model="form.address"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="毕业院校：" prop="school" class="formitem">
+                    <el-input type="text" v-model="form.school"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="专业：" prop="major" class="formitem">
+                    <el-input type="text" v-model="form.major"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+
+              <el-row>
+                <el-col :span="24">
+                  <el-form-item label="身份证号：" prop="idNum" class="formitem">
+                    <el-input type="text" v-model="form.idNum"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+
+              <el-row>
+                <el-col :span="24">
+                  <el-form-item label="备注：" class="formitem">
+                    <el-input type="textarea" v-model="form.remarks"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+
               <el-form-item>
-                <el-button type="primary" @click="onSubmit()" style="margin-left: 23%">保存修改</el-button>
+                <el-button type="primary"
+                           @click="onSubmit()"
+                           style="margin-left: 36%;margin-top: 3%">保存修改</el-button>
               </el-form-item>
             </el-form>
       </div>
@@ -83,6 +134,7 @@
       };
       return{
         imageUrl:'',
+        photo:'',
         form:{
           empno:'',
           ename:'',
@@ -182,6 +234,7 @@
       handleAvatarSuccess(res, file) {
         this.imageUrl = URL.createObjectURL(file.raw);
         this.form.img = "http://localhost:8080/" + res;
+        this.photo = res;
       },
       beforeAvatarUpload(file) {
         const isJPG = file.type === 'image/jpeg';
@@ -199,7 +252,49 @@
     mounted(){
       //编译后获取数据
       this.getStuMessage();
-    }
+    },
+    destroyed: function () {
+      if (this.imageUrl !== this.form.img){
+      this.$confirm('确认保存信息吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        axios({
+          method:"post",
+          url:"/editEmpMessage",
+          data:this.form
+        }).then(res =>{
+          if ("success" === res.data) {
+            this.$message({
+              type: 'success',
+              message: '修改成功'
+            });
+          }else {
+            this.$message({
+              type: 'info',
+              message: '服务器响应失败'
+            });
+          }
+        });
+      }).catch(() => {
+        var imgName = this.photo;
+        axios('/delImg/' + imgName).then(res => {
+          if ('success' === res.data){
+            this.$message({
+              type: 'info',
+              message: '已取消'
+            });
+          } else {
+            this.$message({
+              type: 'info',
+              message: '服务器响应失败'
+            });
+          }
+        })
+      });
+      }
+    },
   }
 </script>
 <style scoped>
@@ -243,6 +338,19 @@
   }
 </style>
 <style>
+  #infoBg{
+    border: 20px solid rgba(100,139,185,0.64);
+  }
+  .formitem{
+    margin: 10px;
+    padding: 8px;
+  }
+  .el-col{
+    border-bottom: 7px solid rgba(76, 76, 76, 0.68);
+    border-top: 5px solid #00b9b7;
+    border-left: 3px solid rgba(76, 76, 76, 0.66);
+    border-right: 2px solid #00b9b7;
+  }
   .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9;
     border-radius: 6px;
