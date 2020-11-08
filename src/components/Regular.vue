@@ -61,7 +61,7 @@
           <template slot-scope="scope">
             <el-button
               size="mini"
-              @click="dialogFormVisible = true">考核
+              @click="testEmp(scope.row)">考核
             </el-button>
           </template>
         </el-table-column>
@@ -72,21 +72,32 @@
     </el-table>
 
 
-    <el-dialog title="打分" :visible.sync="dialogFormVisible">
-      <el-form :model="form">
-        <el-form-item label="评价1" :label-width="formLabelWidth" prop="score">
-          <el-input v-model="form.score1" autocomplete="off"></el-input>
+    <el-dialog title="打分" :visible.sync="dialogFormVisible" width="30%">
+      <el-form ref="form" :model="form">
+        <el-form-item label="员工编号" :label-width="formLabelWidth">
+          <el-input v-model="form.empno" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="评价2" :label-width="formLabelWidth" prop="score">
-          <el-input v-model="form.score2" autocomplete="off"></el-input>
+        <el-form-item label="员工姓名" :label-width="formLabelWidth">
+          <el-input v-model="form.ename" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="评价3" :label-width="formLabelWidth" prop="score">
-          <el-input v-model="form.score3" autocomplete="off"></el-input>
+        <el-form-item v-for="(item,index) in commentTableData"
+                      :key="item.commentId"
+                      :label="item.commentName"
+                      :prop="item.commentName"
+                      :label-width="formLabelWidth"
+        >
+          <el-input placeholder="评分标准为5分制" v-model="item.value"></el-input>
+        </el-form-item>
+        <el-form-item label="整体评价分数" :label-width="formLabelWidth">
+          <el-input v-model="form.content_score" autocomplete="off" placeholder="评分标准为5分制"></el-input>
+        </el-form-item>
+        <el-form-item label="评价（包括主要优点及缺陷）" :label-width="formLabelWidth">
+          <el-input type="textarea" v-model="form.content_text" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submit('form')">确 定</el-button>
+        <el-button type="primary" @click="submit">提交</el-button>
       </div>
     </el-dialog>
   </div>
@@ -115,33 +126,46 @@
         dialogFormVisible: false,
         tableData: [],
         dialog: false,
-        formLabelWidth: '120px',
+        formLabelWidth: '100px',
         form: {
-          score1: '',
-          score2: '',
-          score3: '',
-          score4: '',
-          score5: '',
+          empno: '',
+          ename: '',
+          content_score: '',
+          content_text: '',
+          input1: ''
         },
         commentTableData: [],
       }
     },
     methods: {
       getRegular: function () {
-        axios.get("http://localhost:8080/getAllSumCommentCompany/1/regular").then(res => {
+        axios.get("http://localhost:8080/getAllSumCommentCompany/" + this.$store.state.uid + "/regular").then(res => {
           this.tableData = res.data;
         })
+      },
+      //员工考核
+      testEmp: function (row) {
+        this.form.empno = row.empno;
+        this.form.ename = row.ename;
+        this.dialogFormVisible = true;
+
       },
       getCommentTableData: function () {
         axios.get("/getCommentList").then(res => {
           this.commentTableData = res.data;
         })
       },
-      submit(form) {
-        this.$refs[form].validate((valid) => {
-          if (valid) {
-
-          }
+      submit: function () {
+        alert(this.form.empno + "" + "");
+        for (var i = 0; i < this.commentTableData.length; i++) {
+          alert(this.commentTableData[i]);
+        }
+        axios({
+          method: 'post',
+          url: '/commentRegular',
+          data: this.form
+        }).then(res => {
+          alert(res.data);
         })
       }
 
@@ -186,24 +210,29 @@
 </script>
 
 <style scoped>
-  .dialog-gy{
+  .dialog-gy {
     height: 80vh;
     overflow: auto;
 
   }
-  .div-gy{
+
+  .div-gy {
     border: solid 1px #909399;
   }
+
   .bg-gy {
     color: #909399;
     font-weight: bold;
   }
+
   .bg-purple-gy {
     background: #F5F7FA;
   }
+
   .bg-purple-dark {
     background: #99a9bf;
   }
+
   .grid-content {
     min-height: 36px;
   }
