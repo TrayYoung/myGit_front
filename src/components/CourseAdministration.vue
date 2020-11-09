@@ -5,7 +5,8 @@
         <el-button type="primary" icon="el-icon-circle-plus-outline"
                    @click="addCourse()">添加</el-button>
         <div style="float: right">
-          <el-input v-model="courseName" style="width: 230px" placeholder="请输入课程名"></el-input>
+          <el-input v-model="courseName" style="width: 230px" clearable
+                    @clear="clearCourse()" placeholder="请输入课程名"></el-input>
           <el-button type="primary" icon="el-icon-search" @click="searchCourse()">搜索</el-button>
         </div>
       </div>
@@ -63,10 +64,19 @@
           }
       },
       methods:{
+        clearCourse() {
+          this.searchCourse();
+        },
         getCourse: function () {
-          axios.get("http://localhost:8080/getCourseList/").then(res => {
+          if (this.courseName === ""){
+            this.courseName = 'isNull'
+          }
+          axios.get("http://localhost:8080/getCourse/" + this.courseName).then(res => {
             this.allCourse = res.data;
           });
+          if (this.courseName === "isNull"){
+            this.courseName = ''
+          }
         },
         // 初始页currentPage、初始每页数据数pagesize和数据data
         handleSizeChange: function (size) {
@@ -87,6 +97,8 @@
             "/"+ this.courseName).then(res => {
             this.tableData = res.data;
           });
+          this.currentPage = 1;
+          this.getCourse();
           if (this.courseName === "isNull"){
             this.courseName = ''
           }
@@ -104,6 +116,11 @@
                   message: '删除成功'
                 });
                 this.searchCourse();
+              }else if ("cantdel" === res.data) {
+                this.$message({
+                  type: 'error',
+                  message: '课程有学生成绩，删除失败'
+                });
               }else {
                 this.$message({
                   type: 'info',
