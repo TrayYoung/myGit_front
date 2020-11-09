@@ -30,7 +30,7 @@
 
         <el-table-column
           label="评价人"
-          prop="ename">
+          prop="mname">
         </el-table-column>
 
         <el-table-column
@@ -39,7 +39,6 @@
             v-for="item in commentTableData"
             :key="item.commentId"
             :label="item.commentName"
-
             :prop="item.commentName">
           </el-table-column>
         </el-table-column>
@@ -73,25 +72,27 @@
 
 
     <el-dialog title="打分" :visible.sync="dialogFormVisible" width="30%">
-      <el-form ref="form" :model="form">
+      <el-form ref="form" :model="form" status-icon :rules="rules" class="demo-ruleForm">
         <el-form-item label="员工编号" :label-width="formLabelWidth">
-          <el-input v-model="form.empno" autocomplete="off"></el-input>
+          <el-input v-model="form.empno" autocomplete="off" readonly></el-input>
         </el-form-item>
         <el-form-item label="员工姓名" :label-width="formLabelWidth">
-          <el-input v-model="form.ename" autocomplete="off"></el-input>
+          <el-input v-model="form.ename" autocomplete="off" readonly></el-input>
         </el-form-item>
         <el-form-item v-for="(item,index) in commentTableData"
                       :key="item.commentId"
                       :label="item.commentName"
                       :prop="item.commentName"
                       :label-width="formLabelWidth"
+
+
         >
-          <el-input placeholder="评分标准为5分制" v-model="form.data[index]"></el-input>
+          <el-input placeholder="评分标准为100分制" v-model="form.data[index]"></el-input>
         </el-form-item>
-        <el-form-item label="整体评价分数" :label-width="formLabelWidth">
-          <el-input v-model="form.content_score" autocomplete="off" placeholder="评分标准为5分制"></el-input>
+        <el-form-item label="整体分数" :label-width="formLabelWidth" prop="content_score">
+          <el-input v-model.number="form.content_score" autocomplete="off" placeholder="评分标准为100分制"></el-input>
         </el-form-item>
-        <el-form-item label="评价（包括主要优点及缺陷）" :label-width="formLabelWidth">
+        <el-form-item label="评价（包括主要优点及缺陷）" :label-width="formLabelWidth" prop="content_score">
           <el-input type="textarea" v-model="form.content_text" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
@@ -109,20 +110,15 @@
   export default {
     name: "Regular",
     data() {
-      // var validatepass = (rule, value, callback) => {
-      //   var reg = /^[0-5]\.?\d{0,3}$/;
-      //
-      //   if (!value) {
-      //     return callback(new Error('分数不能为空'));
-      //   }
-      //   if (reg.test(this.form.score1)) {
-      //     callback(new Error('分数格式不正确'))
-      //   } else {
-      //     callback();
-      //   }
-      //
-      // };
       return {
+        ruleForm: {
+          number: ''
+        },
+        rules: {
+          content_score: [
+            {required: true, message: '', trigger: 'blur'},
+          ]
+        },
         dialogFormVisible: false,
         tableData: [],
         dialog: false,
@@ -138,41 +134,66 @@
           score3: '',
           score4: '',
           score5: '',
+          year: 0,
         },
         commentTableData: [],
       }
     },
     methods: {
       getRegular: function () {
-        axios.get("http://localhost:8080/getAllSumCommentCompany/" + this.$store.state.uid + "/regular").then(res => {
+        axios.get("http://localhost:8080/getAllSumCommentCompany/" + this.$store.state.uid + "/regular/" + this.form.year).then(res => {
           this.tableData = res.data;
         })
+
       },
       //员工考核
       testEmp: function (row) {
         this.form.empno = row.empno;
         this.form.ename = row.ename;
+        this.form.data = [];
+        this.form.content_text = '';
+        this.form.content_score = '';
         this.dialogFormVisible = true;
 
       },
+      //获取评价分项
       getCommentTableData: function () {
         axios.get("/getCommentList").then(res => {
           this.commentTableData = res.data;
         })
       },
       submit: function () {
+        var reg = /^([1-9]?\d|100)$/;
+        for (var i = 0; i < 5; i++) {
+          if (!reg.test(this.form.data[i])) {
+            this.$message("分数必须介于0-100之间");
+            return;
+          }
+        }
+        if (!(reg.test(this.form.content_score))) {
+          this.$message("分数必须介于0-100之间");
+          return;
+        }
+        if (!(this.form.content_text != null && this.form.content_text != '')) {
+          this.$message("评价信息不能为空");
+          return;
+        }
+        //拆分数组
         this.form.score1 = this.form.data[0];
         this.form.score2 = this.form.data[1];
         this.form.score3 = this.form.data[2];
         this.form.score4 = this.form.data[3];
         this.form.score5 = this.form.data[4];
-        alert(this.form.data[0] + "" + this.form.data[1] + "");
+        // alert(this.form.data[0] + "" + this.form.data[1] + "");
         axios({
           method: 'post',
           url: '/commentRegular',
           data: this.form
         }).then(res => {
-          alert(res.data);
+          this.$message(res.data);
+          this.getRegular();
+          this.dialogFormVisible = false;
+          this.$refs['form'].resetFields();
         })
         // var abc = JSON.stringify(this.form.data);
         // axios({
