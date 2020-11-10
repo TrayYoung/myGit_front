@@ -1,7 +1,7 @@
 <template>
   <div>
     <div style="padding-left: 65%">
-      <el-input v-model="ename" style="width: 230px" placeholder="请输入姓名"></el-input>
+      <el-input v-model="ename" style="width: 230px" clearable @clear="clearename()" placeholder="请输入姓名"></el-input>
       <el-button type="primary" icon="el-icon-search" @click="searchStudent()">搜索</el-button>
     </div>
     <el-table
@@ -90,11 +90,21 @@
         }
       },
       methods: {
+        clearename() {
+          this.searchStudent();
+        },
         getStudent: function () {
-          var class_num = this.$store.state.classNo;
-          axios.get("http://localhost:8080/getStudentByCno/" + class_num).then(res => {
+          var class_num = sessionStorage.getItem("classNo");//this.$store.state.classNo;
+          if (this.ename === ""){
+            this.ename='isNull'
+          }
+          axios.get("http://localhost:8080/getStudentByCno/" + class_num +
+          "/" + this.ename).then(res => {
             this.allStudent = res.data;
           });
+          if (this.ename === "isNull"){
+            this.ename =''
+          }
         },
         // 初始页currentPage、初始每页数据数pagesize和数据data
         handleSizeChange: function (size) {
@@ -112,8 +122,10 @@
             this.ename='isNull'
           }
           axios.get("/getStudentByName/" + this.currentPage + "/"+ this.pagesize +
-            "/"+ this.ename + "/" + this.$store.state.classNo).then(res => {
+            "/"+ this.ename + "/" + sessionStorage.getItem("classNo")).then(res => {
             this.tableData = res.data;
+            this.currentPage = 1;
+            this.getStudent();
           });
           if (this.ename === "isNull"){
             this.ename =''

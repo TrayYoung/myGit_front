@@ -94,7 +94,7 @@
                 cancelButtonText: '取消',
                 type: 'warning'
               }).then(() => {
-                var uid = this.$store.state.uid;
+                var uid = sessionStorage.getItem("uid");
                 var o_pwd = this.form.o_password;
                 var n_pwd = this.form.n_password;
                     axios.get("http://localhost:8080/resetPassword/" + o_pwd +
@@ -105,12 +105,12 @@
                           message: '修改密码成功！',
                           type: 'success'
                         });
-                        this.$store.dispatch('setUname', null);
+                        /*this.$store.dispatch('setUname', null);
                         this.$store.dispatch('setUid', null);
                         this.$store.dispatch('setUpwd', null);
                         this.$store.dispatch('setUrole', null);
-                        this.$store.dispatch("setClassNo",null);
-                        //sessionStorage.setItem('userName', null);
+                        this.$store.dispatch("setClassNo",null);*/
+                        sessionStorage.clear();
                         this.$router.push({path: '/'})
                       } else if (res.data === "different") {
                         this.$notify.error({

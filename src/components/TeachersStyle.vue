@@ -73,7 +73,7 @@
             this.$message('点个赞了')
           },
         getTeaMessage:function () {
-          var class_num = this.$store.state.classNo;
+          var class_num = sessionStorage.getItem("classNo");
           axios.get("http://localhost:8080/getTeacherMessage/" + class_num).then(res =>{
             this.form = res.data;
             this.imageUrl = this.form.img;

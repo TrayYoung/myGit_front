@@ -6,7 +6,7 @@
           <span style="font-size: 20px;font-family: PingFang SC;">欢迎使用员工评价系统</span>
         </div>
         <div align="right">
-          <span>欢迎你，{{this.$store.state.username}}</span>
+          <span>欢迎你，{{this.username}}</span>
           <span @click="exitSys" style="cursor: pointer">退出</span>
         </div>
       </el-header>
@@ -14,8 +14,8 @@
         <el-aside width="250px" style="background-color: rgb(238, 241, 246);height: 85vh">
           <el-menu
             default-active="/classAdministration">
-            <navigation-item v-for="(menu,i) in adminMenus" :key="i" :item="menu" />
-            <el-menu-item style="font-size: 17px;"  @click="exitSys">
+            <navigation-item v-for="(menu,i) in adminMenus" :key="i" :item="menu"/>
+            <el-menu-item style="font-size: 17px;" @click="exitSys">
               <i class="el-icon-switch-button"></i>
               <span slot="title">退出系统</span>
             </el-menu-item>
@@ -127,6 +127,7 @@
       };*/
       return {
         adminMenus: [],
+        username:sessionStorage.getItem("username"),
         firstPath:''
       /*  userForm: {
           uname: '',
@@ -302,7 +303,8 @@
         this.firstPath=this.adminMenus[0].path;
       },
       getMenu() {
-          axios.get('getMenu/' + this.$store.state.role).then(res => {
+        var role = sessionStorage.getItem("role");
+          axios.get('getMenu/' + role).then(res => {
           this.adminMenus = res.data;
           this.firstPath=res.data[0].path;
         })
@@ -556,14 +558,28 @@
       },*/
       //退出
       exitSys() {
-        if (confirm("确认要退出吗？")) {
-          this.$store.dispatch('setUname', null);
+        /*if (confirm("确认要退出吗？")) {
+          sessionStorage.clear();
+          /!*this.$store.dispatch('setUname', null);
           this.$store.dispatch('setUid', null);
           this.$store.dispatch('setUpwd', null);
-          this.$store.dispatch('setUrole', null);
+          this.$store.dispatch('setUrole', null);*!/
           //sessionStorage.setItem('userName', null);
           this.$router.push({path: '/'})
-        }
+        }*/
+        this.$confirm('确认退出吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          sessionStorage.clear();
+          this.$router.push({path: '/'})
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消'
+          });
+        });
       },
       /*//修改密码
       changePass() {
@@ -638,8 +654,17 @@
     created() {
       //this.isLogin();
       this.getMenu();
-    }
-    ,
+    },
+    mounted() {
+      if (sessionStorage.getItem("uid") === null){
+        this.$message({
+          type: 'error',
+          message: '请先登录!'
+        });
+        sessionStorage.clear();
+        this.$router.push({path: '/'})
+      }
+    },
     components: {
       "navigation-item": NavigationItem
     }

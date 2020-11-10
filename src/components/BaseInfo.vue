@@ -21,17 +21,17 @@
             <el-form ref="form" :rules="rules" :model="form" label-width="100px">
               <div>
                 <el-row style="width: 75%;">
-                    <el-col :span="8">
+                    <el-col :span="8" class="elcol">
                       <el-form-item label="工号：" label-width="60px" class="formitem">
                         <el-input readonly v-model="form.empno"></el-input>
                       </el-form-item>
                     </el-col>
-                  <el-col :span="8">
+                  <el-col :span="8" class="elcol">
                     <el-form-item label="姓名：" prop="ename" label-width="70px" class="formitem">
                       <el-input v-model.trim="form.ename"></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="8">
+                  <el-col :span="8" class="elcol">
                     <el-form-item label="性别：" prop="sex" label-width="80px" class="formitem">
                       <el-radio-group v-model="form.sex">
                         <el-radio label="男">男</el-radio>
@@ -41,13 +41,14 @@
                   </el-col>
               </el-row>
             </div>
+
               <el-row style="width: 75%;">
-                <el-col :span="11">
+                <el-col :span="11" class="elcol">
                   <el-form-item label="班期：" class="formitem" label-width="70px">
                     <el-input readonly v-model="form.cname"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="13">
+                <el-col :span="13" class="elcol">
                   <el-form-item label="出生日期：" prop="birthday"
                                 label-width="90px" class="formitem">
                     <el-date-picker type="date" placeholder="选择日期"
@@ -56,12 +57,12 @@
                 </el-col>
               </el-row>
               <el-row style="width: 75%;">
-                <el-col :span="11">
+                <el-col :span="11" class="elcol">
                   <el-form-item label="联系电话：" prop="tel" class="formitem">
                     <el-input v-model.number="form.tel" autocomplete="off"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="13">
+                <el-col :span="13" class="elcol">
                   <el-form-item label="是否婚配：" label-width="130px" class="formitem">
                     <el-radio-group v-model="form.isMarry">
                       <el-radio label="是">是</el-radio>
@@ -71,7 +72,7 @@
                 </el-col>
               </el-row>
               <el-row>
-                <el-col :span="24">
+                <el-col :span="24" class="elcol">
                   <el-form-item label="籍贯：" prop="address" class="formitem">
                     <el-input v-model="form.address"></el-input>
                   </el-form-item>
@@ -79,12 +80,24 @@
               </el-row>
 
               <el-row>
-                <el-col :span="12">
+                <el-col :span="12" class="elcol">
+                  <el-form-item label="民族：" prop="nation" class="formitem">
+                    <el-input type="text" v-model="form.nation"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12" class="elcol">
+                  <el-form-item label="部门：" prop="dname" class="formitem">
+                    <el-input type="text" readonly v-model="form.dname"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="12" class="elcol">
                   <el-form-item label="毕业院校：" prop="school" class="formitem">
                     <el-input type="text" v-model="form.school"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="12">
+                <el-col :span="12" class="elcol">
                   <el-form-item label="专业：" prop="major" class="formitem">
                     <el-input type="text" v-model="form.major"></el-input>
                   </el-form-item>
@@ -92,7 +105,7 @@
               </el-row>
 
               <el-row>
-                <el-col :span="24">
+                <el-col :span="24" class="elcol">
                   <el-form-item label="身份证号：" prop="idNum" class="formitem">
                     <el-input type="text" v-model="form.idNum"></el-input>
                   </el-form-item>
@@ -100,9 +113,9 @@
               </el-row>
 
               <el-row>
-                <el-col :span="24">
+                <el-col :span="24" class="elcol">
                   <el-form-item label="备注：" class="formitem">
-                    <el-input type="textarea" v-model="form.remarks"></el-input>
+                    <el-input type="textarea" autosize="" v-model="form.remarks"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -156,6 +169,9 @@
             { required: true, message: "请输入姓名", trigger: 'blur'},
             { min: 2, max: 4,message: "最少两个字符，最多四个", trigger: 'blur'}
           ],
+          nation:[
+            { required: true, message: '请输入民族', trigger: 'blur' }
+          ],
           address:[
             { required: true, message: '请输入籍贯地址', trigger: 'blur' }
           ],
@@ -182,12 +198,13 @@
     },
     methods: {
       getStuMessage: function () {
-        var empno = this.$store.state.uid;
+        var empno = sessionStorage.getItem("uid");
         axios.get("http://localhost:8080/getMessage/" + empno).then(res => {
           this.form = res.data;
           this.imageUrl = this.form.img;
           var classNo = res.data.class_num;
-          this.$store.dispatch("setClassNo", classNo);
+          //this.$store.dispatch("setClassNo", classNo);
+          sessionStorage.setItem("classNo",classNo);
         })
       },
       onSubmit() {
@@ -345,11 +362,11 @@
     margin: 10px;
     padding: 8px;
   }
-  .el-col{
-    border-bottom: 7px solid rgba(76, 76, 76, 0.68);
-    border-top: 5px solid #00b9b7;
-    border-left: 3px solid rgba(76, 76, 76, 0.66);
-    border-right: 2px solid #00b9b7;
+  .elcol{
+    border-bottom: 1px solid rgba(76, 76, 76, 0.68);
+    border-top: 1px solid;
+    border-left: 1px solid rgba(76, 76, 76, 0.66);
+    border-right: 1px solid;
   }
   .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9;

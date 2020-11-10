@@ -96,6 +96,9 @@
                 //var password = res.data.password;
                   this.$store.dispatch("setUid",this.form.uid);
                 this.$store.dispatch("setUname",username);
+                sessionStorage.setItem("username",username);
+                sessionStorage.setItem("uid",this.form.uid);
+                sessionStorage.setItem("role",role);
                 //this.$store.dispatch("setUid",this.form.uid);
                   this.$store.dispatch("setRole",role);
                   this.$router.push({path:"/empMain"});

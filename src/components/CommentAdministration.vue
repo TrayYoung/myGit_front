@@ -5,8 +5,10 @@
         <el-button type="primary" icon="el-icon-circle-plus-outline"
                    @click="addComment()">添加</el-button>
         <div style="float: right">
-          <el-input v-model="commentName" style="width: 230px" placeholder="请输入课程名"></el-input>
-          <el-button type="primary" icon="el-icon-search" @click="searchComment()">搜索</el-button>
+          <el-input v-model="commentName" style="width: 240px"
+                    clearable @clear="clearComment()" placeholder="请输入课程名"></el-input>
+          <el-button type="primary" icon="el-icon-search"
+                     @click="searchComment()">搜索</el-button>
         </div>
       </div>
       <el-table
@@ -63,10 +65,19 @@
         }
       },
       methods:{
+        clearComment() {
+          this.searchComment();
+        },
         getComment: function () {
-          axios.get("http://localhost:8080/getCommentList/").then(res => {
+          if (this.commentName === ""){
+            this.commentName = 'isNull'
+          }
+          axios.get("http://localhost:8080/getCommentList/" + this.commentName).then(res => {
             this.allComment = res.data;
           });
+          if (this.commentName === "isNull"){
+            this.commentName =''
+          }
         },
         // 初始页currentPage、初始每页数据数pagesize和数据data
         handleSizeChange: function (size) {
@@ -87,6 +98,8 @@
             "/"+ this.commentName).then(res => {
             this.tableData = res.data;
           });
+          this.currentPage = 1;
+          this.getComment();
           if (this.commentName === "isNull"){
             this.commentName =''
           }
@@ -133,6 +146,11 @@
                   message: '删除成功'
                 });
                 this.searchComment();
+              }else if ("cantdel" === res.data) {
+                this.$message({
+                  type: 'error',
+                  message: '评价项有成绩，删除失败'
+                });
               }else {
                 this.$message({
                   type: 'info',
