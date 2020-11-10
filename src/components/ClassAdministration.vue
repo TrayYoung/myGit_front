@@ -18,7 +18,7 @@
             </el-dropdown-menu>
           </el-dropdown>
 
-          <el-input v-model="queryCname" style="width: 230px" ></el-input>
+          <el-input v-model="queryCname" style="width: 230px" clearable @clear="resetClass"></el-input>
 
 
           <el-button type="primary" icon="el-icon-search" @click="searchClass()">搜索</el-button>
@@ -112,7 +112,7 @@
             <el-button
               size="mini"
               type="danger"
-              @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+              @click="handleDeleteClass(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -258,6 +258,28 @@
         <el-button @click="dialogDeleteStudent = false">取 消</el-button>
         </span>
       </el-dialog>
+      <!--删除-->
+      <el-dialog
+        title="删除"
+        :visible.sync="dialogDelete"
+        width="30%"
+      >
+        <span>确认要将班级{{this.formDelete.cname}}删除吗？</span>
+        <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="confirmDeleteOne">确 定</el-button>
+        <el-button @click="dialogDelete = false">取 消</el-button>
+        </span>
+      </el-dialog>
+      <el-dialog
+        title="error"
+        :visible.sync="dialogDeleteError"
+        width="30%"
+      >
+        <span>此班级中尚有未毕业的学生，不可删除！</span>
+        <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="dialogDeleteError=false">确 定</el-button>
+        </span>
+      </el-dialog>
     </div>
 
 
@@ -394,6 +416,8 @@
         name: "ClassAdministration",
         data(){
           return{
+            dialogDeleteError:false,
+            dialogDelete:false,
             dialogDeleteStudent:false,
             dialogAddStudent:false,
             drawerAddStudent:false,
@@ -404,6 +428,13 @@
             dialog: false,
             dialog1: false,
             loading: false,
+
+            formForSearch:{
+              currentPage:1, //初始页
+              pagesize:5,    //    每页的数据
+              queryCname:'',
+            },
+
             form: {
               name: '',
               region: '',
@@ -440,6 +471,11 @@
               empno:'',
               ename:'',
             },
+            formDelete:{
+              class_num:'',
+              cname:'',
+            },
+
             formLabelWidth: '90px',
             timer: null,
 
@@ -461,6 +497,54 @@
           }
         },
         methods:{
+          resetClass:function(){
+            this.queryCname='';
+            this.getClassListByName();
+          },
+          confirmDeleteOne:function(){
+            axios({
+              method: 'post',
+              url: '/deleteThisClass',
+              data: this.formDelete
+            }).then(res => {
+              if (res.data=='success'){
+                this.dialogDelete=false;
+                this.currentPage=1;
+                this.getClassListByName();
+                this.$notify({
+                  title: 'success',
+                  message: '班级删除成功！',
+                  type: 'success',
+                  position:'top-left'
+                });
+
+              } else if (res.data=='haveStu') {
+                this.dialogDelete=false;
+                this.dialogDeleteError=true;
+                /*this.$notify.error({
+                  title: 'error',
+                  message: '此班级中尚有未毕业的学生，不可删除！',
+                  type: 'error',
+                  position:'top-left'
+                });*/
+              }else {
+                this.dialogDelete=false;
+
+                this.$notify.error({
+                  title: 'error',
+                  message: '班级删除失败！',
+                  type: 'error',
+                  position:'top-left'
+                });
+              }
+
+            });
+          },
+          handleDeleteClass:function(index,row){
+            this.formDelete.class_num=row.cNo;
+            this.formDelete.cname=row.cname;
+            this.dialogDelete=true;
+          },
           handleDeleteStudent:function(index,row){
             this.dialogDeleteStudent=true;
             this.formDeleteStudent.empno=row.empno;
@@ -720,6 +804,7 @@
           },
           showClassInInput:function (val) {
             this.queryCname=val;
+            this.getClassListByName();
           },
           showTeacherInInput:function (val,val2) {
             this.queryTname=val;

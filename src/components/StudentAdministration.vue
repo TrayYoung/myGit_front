@@ -105,14 +105,14 @@
             size="mini"
             type="primary"
             @click="handleEditStudentInfo(scope.$index, scope.row)">修改信息</el-button>
-          <el-button
+         <!-- <el-button
             size="mini"
             type="primary"
-            @click="handleEditStudentCmt(scope.$index, scope.row)">修改评价</el-button>
+            @click="handleEditStudentCmt(scope.$index, scope.row)">修改评价</el-button>-->
           <el-button
             size="mini"
             type="danger"
-            @click="handleDeleteStudent(scope.$index, scope.row)">删除</el-button>
+            @click="handleDeleteOne(scope.$index, scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -143,7 +143,7 @@
           <el-form-item label="姓名：" prop="ename">
             <el-input v-model.trim="formAddOneStudent.ename" style="width: 65%"></el-input>
           </el-form-item>
-          <el-form-item label="班期：">
+          <el-form-item label="班期：" prop="class_num">
             <el-select  v-model="formAddOneStudent.class_num"  placeholder="请选择班级"  filterable style="width: 65%" clearable @clear="resetAddStuCNo">
               <el-option
                 @click.native="setAddStuCNo(item.cNo)"
@@ -302,7 +302,6 @@
     >
 
       <div class="dialog-gy">
-
         <el-row  style="height: 36px">
           <el-col :span="24" align="center" ><div class="grid-content bg-purple-dark"><h1>培训学校评价</h1></div></el-col>
         </el-row>
@@ -310,11 +309,8 @@
         <el-row>
           <el-col :span="24"><div>
             <el-table
-
               :data="userSchoolData"
             >
-
-
               <el-table-column
                 prop="cname"
                 label="班期"
@@ -357,113 +353,117 @@
         </el-row>
       </div> <br>
 
-        <el-row  style="height: 36px">
-          <el-col :span="24" align="center" ><div class="grid-content bg-purple-dark"><h1>转正工作评价</h1></div></el-col>
-        </el-row>
-        <div class="div-gy">
-          <el-row>
-            <el-col :span="24"><div>
-              <el-table
+        <el-card class="card-gy">
+          <el-row  style="height: 36px">
+            <el-col :span="24" align="center" ><div class="grid-content bg-purple-dark"><h1>转正工作评价</h1></div></el-col>
+          </el-row>
+          <div class="div-gy">
+            <el-row>
+              <el-col :span="24"><div>
+                <el-table
 
-                :data="userSchoolData"
-              >
-
-
-                <el-table-column
-                  prop="cname"
-                  label="班期"
+                  :data="userSchoolData"
                 >
-                </el-table-column>
-                <el-table-column
 
-                  prop="ename"
-                  label="评价人"
-                >
-                </el-table-column>
 
-                <el-table-column label="培训期间测试成绩" align="center">
                   <el-table-column
-                    v-for="item in commentTableData"
-                    :key="item.commentId"
-                    :label="item.commentName"
-
-                    :prop="item.commentName">
+                    prop="cname"
+                    label="班期"
+                  >
                   </el-table-column>
-                </el-table-column>
-
-                <el-table-column
-                  prop="school_cmt"
-                  label="整体评价分数"
-                >
-                </el-table-column>
-
-              </el-table>
-
-            </div></el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="24"  align="center"><div class="bg-gy grid-content bg-purple-gy"><span>评价（包括主要优点及缺陷）</span></div></el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="24">
-              <el-input type="textarea" v-model="a"></el-input>
-            </el-col>
-          </el-row>
-        </div>
-
-        <el-row  style="height: 36px">
-          <el-col :span="24" align="center" ><div class="grid-content bg-purple-dark"><h1>工作1年工作评价</h1></div></el-col>
-        </el-row>
-        <div class="div-gy">
-          <el-row>
-            <el-col :span="24"><div>
-              <el-table
-
-                :data="userSchoolData"
-              >
-
-
-                <el-table-column
-                  prop="cname"
-                  label="班期"
-                >
-                </el-table-column>
-                <el-table-column
-
-                  prop="ename"
-                  label="评价人"
-                >
-                </el-table-column>
-
-                <el-table-column label="培训期间测试成绩" align="center">
                   <el-table-column
-                    v-for="item in commentTableData"
-                    :key="item.commentId"
-                    :label="item.commentName"
 
-                    :prop="item.commentName">
+                    prop="ename"
+                    label="评价人"
+                  >
                   </el-table-column>
-                </el-table-column>
 
-                <el-table-column
-                  prop="school_cmt"
-                  label="整体评价分数"
+                  <el-table-column label="培训期间测试成绩" align="center">
+                    <el-table-column
+                      v-for="item in commentTableData"
+                      :key="item.commentId"
+                      :label="item.commentName"
+
+                      :prop="item.commentName">
+                    </el-table-column>
+                  </el-table-column>
+
+                  <el-table-column
+                    prop="school_cmt"
+                    label="整体评价分数"
+                  >
+                  </el-table-column>
+
+                </el-table>
+
+              </div></el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="24"  align="center"><div class="bg-gy grid-content bg-purple-gy"><span>评价（包括主要优点及缺陷）</span></div></el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="24">
+                <el-input type="textarea" v-model="a"></el-input>
+              </el-col>
+            </el-row>
+          </div>
+        </el-card>
+
+        <el-card class="card-gy">
+          <el-row  style="height: 36px">
+            <el-col :span="24" align="center" ><div class="grid-content bg-purple-dark"><h1>转正工作评价</h1></div></el-col>
+          </el-row>
+          <div class="div-gy">
+            <el-row>
+              <el-col :span="24"><div>
+                <el-table
+
+                  :data="userSchoolData"
                 >
-                </el-table-column>
 
-              </el-table>
 
-            </div></el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="24"  align="center"><div class="bg-gy grid-content bg-purple-gy"><span>评价（包括主要优点及缺陷）</span></div></el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="24">
-              <el-input type="textarea" v-model="a"></el-input>
-            </el-col>
-          </el-row>
-        </div>
+                  <el-table-column
+                    prop="cname"
+                    label="班期"
+                  >
+                  </el-table-column>
+                  <el-table-column
+
+                    prop="ename"
+                    label="评价人"
+                  >
+                  </el-table-column>
+
+                  <el-table-column label="培训期间测试成绩" align="center">
+                    <el-table-column
+                      v-for="item in commentTableData"
+                      :key="item.commentId"
+                      :label="item.commentName"
+
+                      :prop="item.commentName">
+                    </el-table-column>
+                  </el-table-column>
+
+                  <el-table-column
+                    prop="school_cmt"
+                    label="整体评价分数"
+                  >
+                  </el-table-column>
+
+                </el-table>
+
+              </div></el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="24"  align="center"><div class="bg-gy grid-content bg-purple-gy"><span>评价（包括主要优点及缺陷）</span></div></el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="24">
+                <el-input type="textarea" v-model="a"></el-input>
+              </el-col>
+            </el-row>
+          </div>
+        </el-card>
 
         <el-row  style="height: 36px">
           <el-col :span="24" align="center" ><div class="grid-content bg-purple-dark"><h1>工作2年工作评价</h1></div></el-col>
@@ -585,6 +585,19 @@
         </span>
       </div>
     </el-dialog>
+
+    <!--删除-->
+    <el-dialog
+      title="删除"
+      :visible.sync="dialogDelete"
+      width="30%"
+    >
+      <span>确认要将用户{{this.formDelete.empno}},{{this.formDelete.ename}}删除吗？</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="confirmDeleteOne">确 定</el-button>
+        <el-button @click="dialogDelete = false">取 消</el-button>
+        </span>
+    </el-dialog>
   </div>
 
 
@@ -610,6 +623,7 @@
           return{
 
 
+            dialogDelete:false,//删除学生
             dName:'',
             DEPTNAME:'金桥培训',
             a:'',
@@ -662,6 +676,10 @@
               cname:''
             },
 
+            formDelete:{
+              empno:'',
+              ename:'',
+            },
 
             formStudentForRegular:{
               empno:'',
@@ -699,6 +717,9 @@
                   message: '目前只支持中国大陆的手机号码，请输入正确的数字号码',
                   trigger: 'blur'
                 },
+              ],
+              class_num:[
+                { required: true, message: '请选择班期！', trigger: 'blur' },
               ],
               /*idNum:[
                 { required: true, message: "请输入身份证号", trigger: "blur" },
@@ -743,6 +764,42 @@
           }
         },
         methods:{
+          confirmDeleteOne:function(){
+            axios({
+              method: 'post',
+              url: '/deleteThisOne',
+              data: this.formDelete
+            }).then(res => {
+              if (res.data=='success'){
+                this.dialogDelete=false;
+                this.getTableData();
+                this.getStudentListByClassNumAndEname();
+                this.$notify({
+                  title: 'success',
+                  message: '学生删除成功！',
+                  type: 'success',
+                  position:'top-left'
+                });
+
+              } else {
+                this.dialogDelete=false;
+                this.getStudentListByClassNumAndEname();
+                this.getTableData();
+                this.$notify.error({
+                  title: 'error',
+                  message: '学生删除失败！',
+                  type: 'error',
+                  position:'top-left'
+                });
+              }
+
+            });
+          },
+          handleDeleteOne:function(index,row){
+            this.formDelete.empno=row.empno;
+            this.formDelete.ename=row.ename;
+            this.dialogDelete=true;
+          },
           resetDeptno:function(){
             this.formStudentForRegular.deptno='';
           },
@@ -762,6 +819,7 @@
               if (res.data=='success'){
                 this.dialogRegular=false;
                 this.getStudentListByClassNumAndEname();
+                this.getTableData();
                 this.$notify({
                   title: 'success',
                   message: '学生转正成功！',
@@ -772,6 +830,7 @@
               } else {
                 this.dialogRegular=false;
                 this.getStudentListByClassNumAndEname();
+                this.getTableData();
                 this.$notify.error({
                   title: 'error',
                   message: '学生转正失败！',
@@ -783,34 +842,59 @@
             });
           },
           addOneNewStudent:function(){
-            axios({
-              //formdata提交
-              method: 'post',
-              url: '/addOneNewStudent',
-              data: this.formAddOneStudent
-            }).then(res => {
-              if (res.data=='success'){
-                this.dialogAddStudent=false;
-                this.getTableData();
-                this.$notify({
-                  title: 'success',
-                  message: '学生新增成功！',
-                  type: 'success',
-                  position:'top-left'
-                });
+            this.$refs.form.validate((valid) => {
+              if (valid){
+                //提交
+                this.$confirm('确认新增学生吗?', '提示', {
+                  confirmButtonText: '确定',
+                  cancelButtonText: '取消',
+                  type: 'warning'
+                }).then(() => {
+                  axios({
+                    //formdata提交
+                    method: 'post',
+                    url: '/addOneNewStudent',
+                    data: this.formAddOneStudent
+                  }).then(res => {
+                    if (res.data=='success'){
+                      this.dialogAddStudent=false;
+                      this.getTableData();
+                      this.$notify({
+                        title: 'success',
+                        message: '学生新增成功！',
+                        type: 'success',
+                        position:'top-left'
+                      });
 
+                    } else {
+                      this.dialogAddStudent=false;
+                      this.getTableData();
+                      this.$notify.error({
+                        title: 'error',
+                        message: '学生新增失败！',
+                        type: 'error',
+                        position:'top-left'
+                      });
+                    }
+
+                  });
+                  this.getTableData();
+                  this.getStudentListByClassNumAndEname();
+                }).catch(() => {
+                  this.$message({
+                    type: 'info',
+                    message: '已取消'
+                  });
+                });
               } else {
-                this.dialogAddStudent=false;
-                this.getTableData();
-                this.$notify.error({
-                  title: 'error',
-                  message: '学生新增失败！',
-                  type: 'error',
-                  position:'top-left'
+                this.$message({
+                  type: 'info',
+                  message: '请正确填写'
                 });
+                return false;
               }
+            })
 
-            });
           },
           setAddStuCNo:function(val){
             this.formAddOneStudent.class_num=val;
@@ -823,6 +907,7 @@
             this.dialogAddStudent=true;
           },
 
+          /*得到待修改的学生的信息*/
           handleEditStudentInfo:function(index,row){
             this.dialogEditBaseInfo=true;
             var empno = row.empno;
@@ -838,10 +923,12 @@
           setQuerySname:function(){
             this.formForSearch.querySname='';
             this.getStudentListByClassNumAndEname();
+            this.getTableData();
           },
           setClassName:function(val){
             this.formForSearch.classNumForSelect='';
             this.getStudentListByClassNumAndEname();
+            this.getTableData();
           },
           // 初始页currentPage、初始每页数据数pagesize和数据data
           handleSizeChange: function (size) {
@@ -857,9 +944,12 @@
           setClassNo:function(val){
             this.formForSearch.classNumForSelect=val;
             this.getStudentListByClassNumAndEname();
+            this.getTableData();
           },
           searchStudent:function(){
+            this.formForSearch.currentPage=1;//每次点查询，结果从第一页开始，防止小bug
             this.getStudentListByClassNumAndEname();
+            this.getTableData();
           },
           handleRegularStudent:function(index,row){
             this.formStudentForRegular.empno=row.empno;
@@ -874,8 +964,12 @@
 
           },
           getTableData:function () {
-            axios.get("/getStudentTableData").then(res => {
-              //this.tableData=res.data;
+            axios({
+              //formdata提交
+              method: 'post',
+              url: '/getStudentTableData',
+              data: this.formForSearch
+            }).then((res) => {
               this.totalTableData=res.data;
             });
           },
@@ -900,6 +994,7 @@
                         message: '修改成功'
                       });
                       this.getStudentListByClassNumAndEname();
+                      this.getTableData();
                     }else {
                       this.$message({
                         type: 'info',

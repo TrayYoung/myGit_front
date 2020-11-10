@@ -101,14 +101,14 @@
             size="mini"
             type="primary"
             @click="handleEditEmp(scope.$index, scope.row)">修改信息</el-button>
-          <el-button
+         <!-- <el-button
             size="mini"
             type="primary"
-            @click="handleEditStudent(scope.$index, scope.row)">修改评价</el-button>
+            @click="handleEditStudent(scope.$index, scope.row)">修改评价</el-button>-->
           <el-button
             size="mini"
             type="danger"
-            @click="handleDeleteStudent(scope.$index, scope.row)">删除</el-button>
+            @click="handleDeleteOne(scope.$index, scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -138,7 +138,7 @@
             <el-form-item label="姓名：" prop="ename">
               <el-input v-model.trim="formAddOneEmp.ename" style="width: 65%"></el-input>
             </el-form-item>
-            <el-form-item label="班期：">
+            <el-form-item label="班期：" prop="class_num">
               <el-select  v-model="formAddOneEmp.class_num"  placeholder="请选择班级"  filterable style="width: 65%" clearable @clear="resetAddEmpCNo">
                 <el-option
                   @click.native="setAddEmpCNo(item.cNo)"
@@ -170,6 +170,10 @@
               </el-select>
             </el-form-item>
             <el-form-item label="员工类型：" prop="emptype">
+              <!--<el-radio-group v-model="formAddOneEmp.emptype">
+                <el-radio label="男">男</el-radio>
+                <el-radio label="女">女</el-radio>
+              </el-radio-group>-->
               <el-select  v-model="formAddOneEmp.emptype"  placeholder="请选择职业" filterable style="width: 65%" clearable @clear="resetEmptype">
                 <el-option label="金桥毕业后入职" value="1" @click.native="setEmptype"></el-option>
                 <el-option label="直接入职" value="2"  @click.native="setEmptype1"></el-option>
@@ -295,6 +299,20 @@
 
 
       </el-dialog>
+
+      <!--删除-->
+      <el-dialog
+        title="删除"
+        :visible.sync="dialogDelete"
+        width="30%"
+      >
+        <span>确认要将用户{{this.formDelete.empno}},{{this.formDelete.ename}}删除吗？</span>
+        <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="confirmDeleteOne">确 定</el-button>
+        <el-button @click="dialogDelete = false">取 消</el-button>
+        </span>
+      </el-dialog>
+
     </div>
 
 
@@ -315,6 +333,7 @@
         };
         return{
 
+          dialogDelete:false,
           dialogAddOneEmp:false,
           dialogEditOneEmp:false,
           formForSearch:{
@@ -322,6 +341,11 @@
             pagesize:5,    //    每页的数据
             deptNo:'',
             queryEname:'',
+          },
+
+          formDelete:{
+            empno:'',
+            ename:'',
           },
           formAddOneEmp:{
             empno:'',
@@ -374,6 +398,9 @@
                 message: '目前只支持中国大陆的手机号码，请输入正确的数字号码',
                 trigger: 'blur'
               },
+            ],
+            class_num:[
+              { required: true, message: '请选择班期！', trigger: 'blur' },
             ],
             school:[
               { required: true,message: "请输入毕业院校", trigger: 'blur'}
@@ -428,6 +455,41 @@
         }
       },
       methods:{
+        confirmDeleteOne:function(){
+          axios({
+            method: 'post',
+            url: '/deleteThisOne',
+            data: this.formDelete
+          }).then(res => {
+            if (res.data=='success'){
+              this.dialogDelete=false;
+              this.getEmpListByDeptnAndEname();
+              this.getTableData();
+              this.$notify({
+                title: 'success',
+                message: '员工删除成功！',
+                type: 'success',
+                position:'top-left'
+              });
+
+            } else {
+              this.dialogDelete=false;
+              this.getEmpListByDeptnAndEname();
+              this.getTableData();
+              this.$notify.error({
+                title: 'error',
+                message: '员工删除失败！',
+                type: 'error',
+                position:'top-left'
+              });
+            }
+          });
+        },
+        handleDeleteOne:function(index,row){
+          this.formDelete.empno=row.empno;
+          this.formDelete.ename=row.ename;
+          this.dialogDelete=true;
+        },
         handleAddOneEmp:function(){
           this.dialogAddOneEmp=true;
         },
@@ -486,6 +548,7 @@
           })
         },
         searchEmp:function(){
+          this.formForSearch.currentPage=1;//解决小bug
           this.getEmpListByDeptnAndEname();
           this.getTableData();
         },
@@ -506,6 +569,7 @@
           this.formEditOneEmp.deptno='';
         },
         setDeptNo:function(val,val2){
+          this.formForSearch.currentPage=1;
           this.formForSearch.deptNo=val;
           //this.dName=val2;
           this.getTableData();
@@ -518,36 +582,58 @@
           this.formEditOneEmp.deptno=val;
         },
         addOneNewEmp:function(){
-          axios({
-            //formdata提交
-            method: 'post',
-            url: '/addOneNewEmp',
-            data: this.formAddOneEmp
-          }).then(res => {
-            if (res.data=='success'){
-              this.dialogAddOneEmp=false;
-              this.getEmpListByDeptnAndEname();
-              this.getTableData();
-              this.$notify({
-                title: 'success',
-                message: '员工新增成功！',
-                type: 'success',
-                position:'top-left'
-              });
+          this.$refs.form.validate((valid) => {
+            if (valid){
+              //提交
+              this.$confirm('确认新增员工吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {
+                axios({
+                  //formdata提交
+                  method: 'post',
+                  url: '/addOneNewEmp',
+                  data: this.formAddOneEmp
+                }).then(res => {
+                  if (res.data=='success'){
+                    this.dialogAddOneEmp=false;
+                    this.getEmpListByDeptnAndEname();
+                    this.getTableData();
+                    this.$notify({
+                      title: 'success',
+                      message: '员工新增成功！',
+                      type: 'success',
+                      position:'top-left'
+                    });
 
+                  } else {
+                    this.dialogAddOneEmp=false;
+                    this.getEmpListByDeptnAndEname();
+                    this.getTableData();
+                    this.$notify.error({
+                      title: 'error',
+                      message: '员工新增失败！',
+                      type: 'error',
+                      position:'top-left'
+                    });
+                  }
+
+                });
+              }).catch(() => {
+                this.$message({
+                  type: 'info',
+                  message: '已取消'
+                });
+              });
             } else {
-              this.dialogAddOneEmp=false;
-              this.getEmpListByDeptnAndEname();
-              this.getTableData();
-              this.$notify.error({
-                title: 'error',
-                message: '员工新增失败！',
-                type: 'error',
-                position:'top-left'
+              this.$message({
+                type: 'info',
+                message: '请正确填写'
               });
+              return false;
             }
-
-          });
+          })
         },
         getTableData:function () {
           axios({

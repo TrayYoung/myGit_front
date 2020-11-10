@@ -25,6 +25,7 @@
           </template>
         </el-table-column>
       </el-table>
+
     </div>
 
       <el-dialog title="打分"
@@ -60,6 +61,8 @@
             </template>
           </el-table-column>
         </el-table>
+
+
         <el-pagination align='center'
                        @size-change="handleSizeChange"
                        @current-change="handleCurrentChange"
@@ -237,6 +240,7 @@
       setScore(index, row) {
         this.dialogFormVisible = true;
         this.empno_stu = row.empno;
+        this.submitForm();
       },
       /*打分*/
       setScores(index, row) {

@@ -1,46 +1,58 @@
 <template>
   <div>
-    <div>
-      <h1>头像区</h1>
-    </div>
-    <div>
       <h1>评价区</h1>
-      <div style="margin: 20px;"></div>
-      <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign">
-        <el-form-item label="班期">
-          <el-input v-model="commentSchoolForm.class_num"></el-input>
-        </el-form-item>
-        <el-form-item label="评价人">
-          <el-input v-model="commentSchoolForm.ename"></el-input>
-        </el-form-item>
-        <el-form-item label="整体评价">
-          <el-input v-model="commentSchoolForm.content_score"></el-input>
-        </el-form-item>
-        <el-form-item label="评价（包括主要优点及缺陷）">
-          <el-input v-model="commentSchoolForm.content_text"></el-input>
-        </el-form-item>
-      </el-form>
-      <el-table
-        :data="courseScoreTable"
-        border
-        style="width: 100%">
-        <el-table-column
-          prop="courseId"
-          label="课程id"
-        >
-        </el-table-column>
-        <el-table-column
-          prop="courseName"
-          label="课程名称"
-        >
-        </el-table-column>
-        <el-table-column
-          prop="score"
-          label="分数"
-        >
-        </el-table-column>
-      </el-table>
-    </div>
+      <el-card class="card-gy">
+        <el-row  style="height: 36px">
+          <el-col :span="24" align="center" ><div class="grid-content bg-purple-dark"><h1>培训学校评价</h1></div></el-col>
+        </el-row>
+        <div class="div-gy">
+          <el-row>
+            <el-col :span="24"><div>
+              <el-table
+                :data="courseScoreTable"
+              >
+                <el-table-column
+                  prop="cname"
+                  label="班期"
+                >
+                </el-table-column>
+                <el-table-column
+
+                  prop="ename"
+                  label="评价人"
+                >
+                </el-table-column>
+
+                <el-table-column label="培训期间测试成绩" align="center">
+                  <el-table-column
+                    v-for="item in scoreTableData"
+                    :key="item.courseId"
+                    :label="item.courseName"
+
+                    :prop="item.courseName">
+                  </el-table-column>
+                </el-table-column>
+
+                <el-table-column
+                  prop="content_score"
+                  label="整体评价分数"
+                >
+                </el-table-column>
+
+              </el-table>
+
+            </div></el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24"  align="center"><div class="bg-gy grid-content bg-purple-gy"><span>评价（包括主要优点及缺陷）</span></div></el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-input type="textarea" v-model="courseScoreTable[0].content_text" readonly></el-input>
+            </el-col>
+          </el-row>
+        </div>
+      </el-card>
   </div>
 
 </template>
@@ -51,13 +63,16 @@
         name: "SchoolComment_Student",
         data(){
           return{
+
             commentSchoolForm:{
-              ename:'',
-              content_score:'',
-              content_text:'',
-              class_num:''
+
+              empno:this.$store.state.uid,
+              content_type:'school_cmt'
             },
-            courseScoreTable:[]
+
+            courseScoreTable:[],
+            scoreTableData:[],
+            commentTableData:[],
           }
         },
       methods:{
@@ -73,15 +88,68 @@
           axios.get("/getSumCommentSchool/"+empno).then(res => {
             this.commentSchoolForm = res.data;
           })
-        }
+        },
+        getScoreTableData:function () {
+          axios.get("/getCourseList").then(res => {
+            this.scoreTableData=res.data;
+          })
+        },
+        getCommentTableData:function () {
+          axios({
+            method: 'post',
+            url: '/getOnesSumCommentSchool',
+            data: this.commentSchoolForm
+          }).then((res) => {
+            this.courseScoreTable=res.data;
+          });
+        },
       },
       mounted() {
         this.getCourseScoreByEmpno();
         this.getCommentSchool();
+        this.getCommentTableData();
+        this.getScoreTableData();
+
       }
     }
 </script>
 
 <style scoped>
+  .dialog-gy{
+    height: 80vh;
+    overflow: auto;
 
+  }
+  .dialog-gy2{
+    height: 81vh;
+    overflow: auto;
+
+  }
+  .div-gy{
+    border: solid 1px #909399;
+  }
+  .bg-gy {
+    color: #909399;
+    font-weight: bold;
+  }
+  .bg-purple-gy {
+    background: #F5F7FA;
+  }
+  .bg-purple-dark {
+    background: #99a9bf;
+  }
+  .grid-content {
+
+    min-height: 36px;
+  }
+  .card-gy{
+    width: 61.8%;/*黄金比例*/
+    margin-left: 50%;
+
+    transform: translate(-50%, 0%);
+    /*left: 119.1%;
+    top: 10%;
+   !* transform: translate(-50%, -50%);*!
+    width: 61.8%;*/
+  }
 </style>

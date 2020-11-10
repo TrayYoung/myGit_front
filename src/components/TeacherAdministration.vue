@@ -89,14 +89,14 @@
           size="mini"
           type="primary"
           @click="handleEditTeacher(scope.$index, scope.row)">修改信息</el-button>
-        <el-button
+      <!--  <el-button
           size="mini"
           type="primary"
-          @click="handleEditStudent(scope.$index, scope.row)">修改评价</el-button>
+          @click="handleEditStudent(scope.$index, scope.row)">修改评价</el-button>-->
         <el-button
           size="mini"
           type="danger"
-          @click="handleDeleteStudent(scope.$index, scope.row)">删除</el-button>
+          @click="handleDeleteOne(scope.$index, scope.row)">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -107,7 +107,7 @@
       :page-sizes="[5, 10, 20, 40]"
       :page-size="formForSearch.pagesize"
       layout="total, sizes, prev, pager, next, jumper"
-      :total="tableData.length"><!--这里有个小bug，待解决-->
+      :total="totalTableData.length"><!--这里有个小bug，现已解决-->
     </el-pagination>
 
 
@@ -230,7 +230,18 @@
         </span>
         </div>
 
+      </el-dialog>
 
+      <el-dialog
+        title="删除"
+        :visible.sync="dialogDelete"
+        width="30%"
+      >
+        <span>确认要将用户{{this.formDelete.empno}},{{this.formDelete.ename}}删除吗？</span>
+        <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="confirmDeleteOne">确 定</el-button>
+        <el-button @click="dialogDelete = false">取 消</el-button>
+        </span>
       </el-dialog>
     </div>
   </div>
@@ -243,6 +254,7 @@
       data(){
         return{
 
+          dialogDelete:false,
           dialogAddOneTeacher:false,
           dialogEditOneTeacher:false,
           DEPTNAME:'金桥培训',
@@ -250,6 +262,11 @@
             currentPage:1, //初始页
             pagesize:5,    //    每页的数据
             queryTname:'',
+          },
+
+          formDelete:{
+            empno:'',
+            ename:'',
           },
 
           formAddOneTeacher:{
@@ -347,6 +364,40 @@
         }
       },
       methods:{
+        confirmDeleteOne:function(){
+          axios({
+            method: 'post',
+            url: '/deleteThisOne',
+            data: this.formDelete
+          }).then(res => {
+            if (res.data=='success'){
+              this.dialogDelete=false;
+              this.getTeacherListByTname();
+              this.$notify({
+                title: 'success',
+                message: '教师删除成功！',
+                type: 'success',
+                position:'top-left'
+              });
+
+            } else {
+              this.dialogDelete=false;
+              this.getTeacherListByTname();
+              this.$notify.error({
+                title: 'error',
+                message: '教师删除失败！',
+                type: 'error',
+                position:'top-left'
+              });
+            }
+
+          });
+        },
+        handleDeleteOne:function(index,row){
+          this.formDelete.empno=row.empno;
+          this.formDelete.ename=row.ename;
+          this.dialogDelete=true;
+        },
         resetEditTchCNo:function(){
           this.formEditOneEmp.class_num='';
         },
@@ -366,40 +417,67 @@
           this.dialogAddOneTeacher=true;
         },
         addOneNewTeacher:function(){
-          axios({
-            //formdata提交
-            method: 'post',
-            url: '/addOneNewTeacher',
-            data: this.formAddOneTeacher
-          }).then(res => {
-            if (res.data=='success'){
-              this.dialogAddOneTeacher=false;
-              this.getTableData();
-              this.getTeacherListByTname();
-              this.$notify({
-                title: 'success',
-                message: '教师新增成功！',
-                type: 'success',
-                position:'top-left'
-              });
+          this.$refs.form.validate((valid) => {
+            if (valid){
+              //提交
+              this.$confirm('确认新增教师吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {
+                axios({
+                  //formdata提交
+                  method: 'post',
+                  url: '/addOneNewTeacher',
+                  data: this.formAddOneTeacher
+                }).then(res => {
+                  if (res.data=='success'){
+                    this.dialogAddOneTeacher=false;
+                    this.getTableData();
+                    this.getTeacherListByTname();
+                    this.$notify({
+                      title: 'success',
+                      message: '教师新增成功！',
+                      type: 'success',
+                      position:'top-left'
+                    });
 
+                  } else {
+                    this.dialogAddOneTeacher=false;
+                    this.getTableData();
+                    this.getTeacherListByTname()
+                    this.$notify.error({
+                      title: 'error',
+                      message: '教师新增失败！',
+                      type: 'error',
+                      position:'top-left'
+                    });
+                  }
+
+                });
+                this.getTableData();
+                this.getTeacherListByTname();
+                this.formAddOneTeacher.ename='';
+              }).catch(() => {
+                this.$message({
+                  type: 'info',
+                  message: '已取消'
+                });
+              });
             } else {
-              this.dialogAddOneTeacher=false;
-              this.getTableData();
-              this.getTeacherListByTname()
-              this.$notify.error({
-                title: 'error',
-                message: '教师新增失败！',
-                type: 'error',
-                position:'top-left'
+              this.$message({
+                type: 'info',
+                message: '请正确填写'
               });
+              return false;
             }
+          })
 
-          });
         },
         searchTeacher:function(){
           this.formForSearch.currentPage=1;//防止第二页后搜索无数据
           this.getTeacherListByTname();
+          this.getTableData();
         },
         setQueryTname:function(){
           this.formForSearch.queryTname='';
@@ -462,16 +540,21 @@
         },
         handleSizeChange: function (size) {
           this.formForSearch.pagesize = size;
-          this.getStudentListByClassNumAndEname();
+          this.getTeacherListByTname();
           console.log(this.pagesize)  //每页下拉显示数据
         },
         handleCurrentChange: function(currentPage){
           this.formForSearch.currentPage = currentPage;
-          this.getStudentListByClassNumAndEname();
+          this.getTeacherListByTname();
           console.log(this.currentPage)  //点击第几页
         },
         getTableData:function () {
-          axios.get("/getTeacherTableData").then(res => {
+          axios({
+            //formdata提交
+            method: 'post',
+            url: '/getTeacherTableData',
+            data: this.formForSearch
+          }).then((res) => {
             this.totalTableData=res.data;
           });
         },
