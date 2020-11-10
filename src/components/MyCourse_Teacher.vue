@@ -103,7 +103,7 @@
             <el-table-column prop="ename" label="姓名"></el-table-column>
             <el-table-column prop="class" label="班级"></el-table-column>
             <el-table-column>
-              <template scope="scope">
+              <template slot-scope="scope">
                 <el-form-item>
                   <el-input v-model="scope.row.score"></el-input>
                 </el-form-item>

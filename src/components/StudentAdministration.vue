@@ -1039,7 +1039,7 @@
             });
           },
           getCommentTableData:function () {
-            axios.get("/getCommentList").then(res => {
+            axios.get("/getCommentListGY").then(res => {
               this.commentTableData=res.data;
             })
           },
