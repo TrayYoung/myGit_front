@@ -53,6 +53,9 @@
             <el-button
               @click="handleViewInfo(scope.$index,scope.row)" type="primary" style="margin-left: 16px;">查看
             </el-button>
+            <el-button
+             @click="setContent(scope.$index,scope.row)" type="primary" >评价
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -75,245 +78,279 @@
         :direction="rtl"
         :size="size"
         :before-close="handleClose">
-        <div>
+         <div>
+           <table>
+             <!--第一行-->
+             <tr>
+               <td>
+                 <el-table
+                   :data="tableData2">
+                   <el-table-column
+                     prop="empno"
+                   label="工号">
+                   </el-table-column>
+                 </el-table>
+               </td>
+               <td>
+                 <el-table
+                 :data="tableData2">
+                   <el-table-column
+                   prop="ename"
+                   label="姓名">
+                   </el-table-column>
+                 </el-table>
+               </td>
+               <td>
+                 <el-table
+                   :data="tableData2">
+                   <el-table-column
+                     prop="sex"
+                     label="性别">
+                   </el-table-column>
+                 </el-table>
+               </td>
+               <td width="180">
+                 <el-table
+                   :data="tableData2">
+                   <el-table-column
+                     prop="birthday"
+                     label="生日">
+                   </el-table-column>
+                 </el-table>
+               </td>
+             </tr>
+             <!--第二行-->
+             <tr>
+               <td>
+                 <el-table
+                   :data="tableData2">
+                   <el-table-column
+                     prop="address"
+                     label="地址">
+                   </el-table-column>
+                 </el-table>
+               </td>
+               <td>
+                 <el-table
+                   :data="tableData2">
+                   <el-table-column
+                     prop="isMarry"
+                     label="是否已婚">
+                   </el-table-column>
+                 </el-table>
+               </td>
+               <td>
+                 <el-table
+                   :data="tableData2">
+                   <el-table-column
+                     prop="school"
+                     label="学校">
+                   </el-table-column>
+                 </el-table>
+               </td>
+               <td>
+                 <el-table
+                   :data="tableData2">
+                   <el-table-column
+                     prop="major"
+                     label="专业">
+                   </el-table-column>
+                 </el-table>
+               </td>
+             </tr>
+             <tr>
+               <td>
+                 <el-table
+                   :data="tableData2">
+                   <el-table-column
+                     prop="tel"
+                     label="电话">
+                   </el-table-column>
+                 </el-table>
+               </td>
+               <td width="150">
+                 <el-table
+                   :data="tableData2">
+                   <el-table-column
+                     prop="idNum"
+                     label="身份证">
+                   </el-table-column>
+                 </el-table>
+               </td>
+               <td>
+                 <el-table
+                   :data="tableData2">
+                   <el-table-column
+                     prop="remarks"
+                     label="是否已婚">
+                   </el-table-column>
+                 </el-table>
+               </td>
+               <td>
+                 <el-table
+                   :data="tableData2">
+                   <el-table-column
+                     prop="dname"
+                     label="部门">
+                   </el-table-column>
+                 </el-table>
+               </td>
+             </tr>
+           </table>
+             <table>
+             <!--第三行-->
+             <tr>
+               <td>
+                 <el-table
+                 :data="score1">
+                   <el-table-column
+                   prop="score"
+                   label="html"
+                   width="60">
+                   </el-table-column>
+                 </el-table>
+               </td>
+               <td>
+                 <el-table
+                   :data="score2">
+                   <el-table-column
+                     prop="score"
+                     label="oracle"
+                     width="65">
+                   </el-table-column>
+                 </el-table>
+               </td>
+               <td>
+                 <el-table
+                   :data="score3">
+                   <el-table-column
+                     prop="score"
+                     label="JS笔试"
+                     width="65">
+                   </el-table-column>
+                 </el-table>
+               </td>
+               <td>
+                 <el-table
+                   :data="score4">
+                   <el-table-column
+                     prop="score"
+                     label="java基础笔试"
+                   width="110">
+                   </el-table-column>
+                 </el-table>
+               </td>
+               <td>
+                 <el-table
+                   :data="score5">
+                   <el-table-column
+                     prop="score"
+                     label="java高级笔试"
+                   width="110">
+                   </el-table-column>
+                 </el-table>
+               </td>
+               <td>
+                 <el-table
+                   :data="score6">
+                   <el-table-column
+                     prop="score"
+                     label="L1面试"
+                     width="65">
+                   </el-table-column>
+                 </el-table>
+               </td>
+             </tr>
+               <tr>
+                 <td colspan="6">
+                   <el-table
+                     :data="tableComment">
+                     <el-table-column
+                       prop="content_text"
+                     label="学校评价">
+                     </el-table-column>
+                   </el-table>
+                 </td>
 
-          <table>
-            <!--第一行-->
-            <tr>
-              <td>
-                <el-table
-                  :data="tableData2">
-                  <el-table-column
-                    prop="empno"
-                  label="工号">
-                  </el-table-column>
-                </el-table>
-              </td>
-              <td>
-                <el-table
-                :data="tableData2">
-                  <el-table-column
-                  prop="ename"
-                  label="姓名">
-                  </el-table-column>
-                </el-table>
-              </td>
-              <td>
-                <el-table
-                  :data="tableData2">
-                  <el-table-column
-                    prop="sex"
-                    label="性别">
-                  </el-table-column>
-                </el-table>
-              </td>
-              <td width="180">
-                <el-table
-                  :data="tableData2">
-                  <el-table-column
-                    prop="birthday"
-                    label="生日">
-                  </el-table-column>
-                </el-table>
-              </td>
-            </tr>
-            <!--第二行-->
-            <tr>
-              <td>
-                <el-table
-                  :data="tableData2">
-                  <el-table-column
-                    prop="address"
-                    label="地址">
-                  </el-table-column>
-                </el-table>
-              </td>
-              <td>
-                <el-table
-                  :data="tableData2">
-                  <el-table-column
-                    prop="isMarry"
-                    label="是否已婚">
-                  </el-table-column>
-                </el-table>
-              </td>
-              <td>
-                <el-table
-                  :data="tableData2">
-                  <el-table-column
-                    prop="school"
-                    label="学校">
-                  </el-table-column>
-                </el-table>
-              </td>
-              <td>
-                <el-table
-                  :data="tableData2">
-                  <el-table-column
-                    prop="major"
-                    label="专业">
-                  </el-table-column>
-                </el-table>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <el-table
-                  :data="tableData2">
-                  <el-table-column
-                    prop="tel"
-                    label="电话">
-                  </el-table-column>
-                </el-table>
-              </td>
-              <td width="150">
-                <el-table
-                  :data="tableData2">
-                  <el-table-column
-                    prop="idNum"
-                    label="身份证">
-                  </el-table-column>
-                </el-table>
-              </td>
-              <td>
-                <el-table
-                  :data="tableData2">
-                  <el-table-column
-                    prop="remarks"
-                    label="是否已婚">
-                  </el-table-column>
-                </el-table>
-              </td>
-              <td>
-                <el-table
-                  :data="tableData2">
-                  <el-table-column
-                    prop="dname"
-                    label="部门">
-                  </el-table-column>
-                </el-table>
-              </td>
-            </tr>
-          </table>
-            <table>
-            <!--第三行-->
-            <tr>
-              <td>
-                <el-table
-                :data="score1">
-                  <el-table-column
-                  prop="score"
-                  label="html"
-                  width="60">
-                  </el-table-column>
-                </el-table>
-              </td>
-              <td>
-                <el-table
-                  :data="score2">
-                  <el-table-column
-                    prop="score"
-                    label="oracle"
-                    width="65">
-                  </el-table-column>
-                </el-table>
-              </td>
-              <td>
-                <el-table
-                  :data="score3">
-                  <el-table-column
-                    prop="score"
-                    label="JS笔试"
-                    width="65">
-                  </el-table-column>
-                </el-table>
-              </td>
-              <td>
-                <el-table
-                  :data="score4">
-                  <el-table-column
-                    prop="score"
-                    label="java基础笔试"
-                  width="110">
-                  </el-table-column>
-                </el-table>
-              </td>
-              <td>
-                <el-table
-                  :data="score5">
-                  <el-table-column
-                    prop="score"
-                    label="java高级笔试"
-                  width="110">
-                  </el-table-column>
-                </el-table>
-              </td>
-              <td>
-                <el-table
-                  :data="score6">
-                  <el-table-column
-                    prop="score"
-                    label="L1面试"
-                    width="65">
-                  </el-table-column>
-                </el-table>
-              </td>
-            </tr>
-          </table>
-<!--          <el-row style="height: 36px">
-            <el-col :span="24" align="center">
-              <div class="grid-content bg-purple-dark"><h1>培训学校评价</h1></div>
-            </el-col>
+               </tr>
+           </table>
+         </div>
+      </el-drawer>
+      <!--<el-card class="card-gy">
+          <el-row  style="height: 36px">
+            <el-col :span="24" align="center" ><div class="grid-content bg-purple-dark"><h1>培训学校评价</h1></div></el-col>
           </el-row>
           <div class="div-gy">
             <el-row>
-              <el-col :span="24">
-                <div>
-                  <el-table
-                    :data="tableData2"
+              <el-col :span="24"><div>
+                <el-table
+                  :data="courseScoreTable"
+                >
+                  <el-table-column
+                    prop="cname"
+                    label="班期"
                   >
-                    <el-table-column
-                      prop="cname"
-                      label="班期"
-                    >
-                    </el-table-column>
-                    <el-table-column
-                      prop="ename"
-                      label="评价人"
-                    >
-                    </el-table-column>
-                    <el-table-column label="培训期间测试成绩" align="center">
-                      <el-table-column
-                        v-for="item in scoreTableData"
-                        :key="item.courseId"
-                        :label="item.courseName"
-                        :prop="item.courseName">
-                      </el-table-column>
-                    </el-table-column>
+                  </el-table-column>
+                  <el-table-column
 
+                    prop="ename"
+                    label="评价人"
+                  >
+                  </el-table-column>
+
+                  <el-table-column label="培训期间测试成绩" align="center">
                     <el-table-column
-                      prop="school_cmt"
-                      label="整体评价分数"
-                    >
+                      v-for="item in scoreTableData"
+                      :key="item.courseId"
+                      :label="item.courseName"
+                      :prop="item.courseName">
                     </el-table-column>
-                  </el-table>
-                </div>
-              </el-col>
+                  </el-table-column>
+
+                  <el-table-column
+                    prop="content_score"
+                    label="整体评价分数"
+                  >
+                  </el-table-column>
+
+                </el-table>
+
+              </div></el-col>
             </el-row>
             <el-row>
-              <el-col :span="24" align="center">
-                <div class="bg-gy grid-content bg-purple-gy"><span>评价（包括主要优点及缺陷）</span></div>
-              </el-col>
+              <el-col :span="24"  align="center"><div class="bg-gy grid-content bg-purple-gy"><span>评价（包括主要优点及缺陷）</span></div></el-col>
             </el-row>
             <el-row>
               <el-col :span="24">
-                <el-input type="textarea" v-model="a"></el-input>
+                <el-input type="textarea" v-model="courseScoreTable[0].content_text" readonly></el-input>
               </el-col>
             </el-row>
           </div>
-          <br>-->
+        </el-card>-->
 
-        </div>
+        <!--#############################################################-->
+
+
+      <!--评价-->
+      <el-drawer
+        title="个人信息"
+        :visible.sync="contentDrawer"
+        :direction="rtl"
+        :size="size"
+        :before-close="handleClose">
+
+        <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign">
+          <el-form-item label="整体评价（包括主要优点及缺陷）" >
+            <el-input v-model="commentSchoolForm.content_text"
+                      type="textarea"
+            :rows="6"
+            style="width: 400px"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="submitContent">提交</el-button>
+          </el-form-item>
+        </el-form>
+
       </el-drawer>
       <!--以上为查看内容-->
 
@@ -358,12 +395,23 @@
       return {
         tableData: [],
         tableData2: [],
+        courseScoreTable:[],
+        scoreTableData:[],
+        tableComment:[],
+
         drawer: false,
         direction: 'rtl',
         size: '550px',
         stuInfo: [],
         asd: 1,
         empno1: "",
+        /*评价*/
+        contentDrawer:false,
+        commentSchoolForm:{
+          empno:'',
+          content_text:''
+        },
+
 
 
         pagesize: 4,
@@ -389,8 +437,8 @@
         },
         score1:'',
         score2:'',
-        score3:'',
-        score4:'',score5:'',score6:'',score7:'',
+        score3:'',score4:'',score5:'',score6:'',score7:'',
+
 
 
 
@@ -409,8 +457,11 @@
       handleViewInfo(index, row) {
         this.drawer = true;
         this.empno1 = row.empno;
+        this.commentSchoolForm.empno = row.empno;
         this.getStuInfo();
         this.getScore1();this.getScore2();this.getScore3();this.getScore4();this.getScore5();this.getScore6();
+        this.getComment();
+
       },
       /*个人基本信息*/
       getStuInfo: function () {
@@ -424,7 +475,9 @@
         var empno = this.empno1;
         var courseid1 = 1;
         axios.get("http://localhost:8080/getScoreByEmpno/"+empno+"/"+courseid1).then(res =>{
+
           this.score1 = res.data;
+
         })
       },
       getScore2:function(){
@@ -462,6 +515,12 @@
           this.score6 = res.data;
         })
       },
+      getComment:function(){
+        var empno = this.empno1
+          axios.get("http://localhost:8080/getComment/"+empno).then(res =>{
+            this.tableComment = res.data;
+          })
+      },
 
 
       handleClose(done) {
@@ -481,6 +540,55 @@
       handleSelectionChange(val) {
         console.log(val)
       },
+      /*评价*/
+      setContent(index,row){
+        this.contentDrawer = true;
+        this.empno1 = row.empno;
+
+
+      },
+      submitContent:function(){
+/*       var content = this.commentSchoolForm.content_text;
+        var empno_stu = this.empno1;
+        var empno_tch = this.$store.state.uid;
+        alert(content+"/"+empno_stu+"/"+empno_tch)*/
+        axios({
+          method:'post',
+          url: 'http://localhost:8080/setContent',
+          data:{
+             content : this.commentSchoolForm.content_text,
+            empno_tch : this.$store.state.uid,
+         empno_stu : this.empno1
+          }
+        }).then(res =>{
+          if (res.data != ""){
+            alert(res.data)
+            this.contentDrawer = false;
+          } else {
+            alert("由于某些原因导致了提交失败");
+          }
+
+        })
+      },
+
+/*
+      getCommentTableData:function () {
+        axios({
+          method: 'post',
+          url: '/getOnesSumCommentSchool',
+          data: this.commentSchoolForm
+        }).then((res) => {
+          this.courseScoreTable=res.data;
+        });
+      },
+      getScoreTableData:function () {
+        axios.get("/getCourseListGH").then(res => {
+          this.scoreTableData=res.data;
+        })
+      },
+*/
+
+
 
 
       /*查询*/
@@ -517,6 +625,12 @@
               this.tableData = res.data
             })
           }
+          if (empno_stu != "" && ename != ""){
+            let url = "selectStu";
+            axios.get("http://localhost:8080/" + url + "/" + uid + "/" + empno_stu+"/"+ename).then(res =>{
+              this.tableData = res.data;
+            })
+          }
 
         }
 
@@ -540,5 +654,42 @@
 
   .el-icon-arrow-down {
     font-size: 12px;
+  }
+  .dialog-gy{
+    height: 80vh;
+    overflow: auto;
+
+  }
+  .dialog-gy2{
+    height: 81vh;
+    overflow: auto;
+
+  }
+  .div-gy{
+    border: solid 1px #909399;
+  }
+  .bg-gy {
+    color: #909399;
+    font-weight: bold;
+  }
+  .bg-purple-gy {
+    background: #F5F7FA;
+  }
+  .bg-purple-dark {
+    background: #99a9bf;
+  }
+  .grid-content {
+
+    min-height: 36px;
+  }
+  .card-gy{
+    width: 61.8%;/*黄金比例*/
+    margin-left: 50%;
+
+    transform: translate(-50%, 0%);
+    /*left: 119.1%;
+    top: 10%;
+   !* transform: translate(-50%, -50%);*!
+    width: 61.8%;*/
   }
 </style>
