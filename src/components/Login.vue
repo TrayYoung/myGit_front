@@ -102,6 +102,16 @@
                 //this.$store.dispatch("setUid",this.form.uid);
                   this.$store.dispatch("setRole",role);
                   this.$router.push({path:"/empMain"});
+
+                  /*控制登陆首页*/
+                  if (role==0){
+                    this.$router.push({path:"/studentAdministration"});
+                    this.$store.dispatch("setDefault",'/studentAdministration');
+                  } else {
+                    this.$router.push({path:"/baseInfo"});
+                    this.$store.dispatch("setDefault",'/baseInfo');
+                  }
+
                 }
             })
           } else {

@@ -13,7 +13,8 @@
           </el-option>
         </el-select>
 
-        <el-input v-model="formForSearch.querySname" style="width: 230px" type="text" clearable placeholder="请输入学生姓名" @clear="setQuerySname"></el-input>
+        <el-input v-model="formForSearch.querySname" style="width: 230px" type="text" clearable placeholder="请输入学生姓名"
+                  @clear="setQuerySname" @keyup.enter.native="searchStudent" @keyup.delete.native="searchStudent"></el-input>
 
 
         <el-button type="primary" icon="el-icon-search" @click="searchStudent">搜索</el-button>
@@ -24,6 +25,8 @@
       </div></el-col>
       <el-col :span="8"><div class="grid-content bg-purple">
         <el-button type="primary" @click="handleAddOneStudent" >新增学生<i class="el-icon-plus"></i></el-button>
+      <!--  <el-button type="primary" @click="handleExportTab" >导出</el-button>
+        <el-button type="primary" @click="handleImportTab" >导入</el-button>-->
       </div></el-col>
     </el-row>
     <br>
@@ -764,6 +767,14 @@
           }
         },
         methods:{
+         /* handleExportTab:function(){
+            axios.get("/exportEmp").then(res => {
+
+            })
+          },
+          handleImportTab:function(){
+
+          },*/
           confirmDeleteOne:function(){
             axios({
               method: 'post',

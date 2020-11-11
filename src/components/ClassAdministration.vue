@@ -18,7 +18,8 @@
             </el-dropdown-menu>
           </el-dropdown>
 
-          <el-input v-model="queryCname" style="width: 230px" clearable @clear="resetClass"></el-input>
+          <el-input v-model="queryCname" style="width: 230px" clearable
+                    @clear="resetClass" @keyup.enter.native="searchClass" @keyup.delete.native="searchClass"></el-input>
 
 
           <el-button type="primary" icon="el-icon-search" @click="searchClass()">搜索</el-button>
@@ -374,7 +375,7 @@
     <div>
       <h1>此班级的学生列表</h1>
       <el-table
-        :data="studentTable"
+        :data="studentByPageTable"
         border
         style="width: 100%">
         <el-table-column
@@ -405,6 +406,15 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination
+        @size-change="handleSizeChange1"
+        @current-change="handleCurrentChange1"
+        :current-page="formForSearchStu.currentPage"
+        :page-sizes="[5, 10, 20, 40]"
+        :page-size="formForSearchStu.pagesize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="studentTable.length">
+      </el-pagination>
     </div>
   </div>
 
@@ -429,10 +439,16 @@
             dialog1: false,
             loading: false,
 
+            classMemberList:[],//班级成员
             formForSearch:{
               currentPage:1, //初始页
               pagesize:5,    //    每页的数据
               queryCname:'',
+            },
+            formForSearchStu:{
+              currentPage:1, //初始页
+              pagesize:5,    //    每页的数据
+              class_num:''
             },
 
             form: {
@@ -493,7 +509,8 @@
             teacherList:[],
             studentsToAddList:[],//未分配班级的学生列表
             classByNameList:[],
-            studentTable:[]
+            studentTable:[],
+            studentByPageTable:[]
           }
         },
         methods:{
@@ -757,7 +774,6 @@
               }
 
             });
-
           },
 
 
@@ -768,7 +784,9 @@
             this.className=data.cname;
             this.classNum=data.cNo;
             this.teacherId=data.empno;
+            this.formForSearchStu.class_num=cNo;
             this.getClassMemberByCNo(cNo);
+            this.getClassMemberByThree();
           },
           searchClass:function(){
             this.getClassListByName();
@@ -782,6 +800,19 @@
           handleCurrentChange: function(currentPage){
             this.currentPage = currentPage;
             this.getClassListByName();
+            console.log(this.currentPage)  //点击第几页
+          },
+          // 初始页currentPage、初始每页数据数pagesize和数据data
+          handleSizeChange1: function (size) {
+            this.formForSearchStu.pagesize = size;
+            //this.getClassListByName();
+            this.getClassMemberByThree();
+            console.log(this.pagesize)  //每页下拉显示数据
+          },
+          handleCurrentChange1: function(currentPage){
+            this.formForSearchStu.currentPage = currentPage;
+            //this.getClassListByName();
+            this.getClassMemberByThree();
             console.log(this.currentPage)  //点击第几页
           },
           getClassListForSelect:function(){
@@ -823,14 +854,25 @@
             }
           },
           getClassMemberByCNo:function (cNo) {
-            /**/
             axios.get("/getStudentByCno/"+cNo).then(res => {
               this.studentTable=res.data;
+            });
+
+          },
+          getClassMemberByThree:function (cNo) {
+            axios({
+              //formdata提交
+              method: 'post',
+              url: '/getStudentByThree',
+              data: this.formForSearchStu
+            }).then((res) => {
+              this.studentByPageTable=res.data;
             });
 
           }
         },
         mounted() {
+          //this.getClassMemberByThree();
           this.getClassListForSelect();
           this.getTeacherListForSelect();
           this.getClassListByName();

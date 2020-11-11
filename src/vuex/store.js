@@ -10,7 +10,8 @@ const store = new Vuex.Store({
     uid:null,
     username:null,
     password:null,
-    classNo:null
+    classNo:null,
+    defaultG:null
   },
   mutations: { //定义方法：set方法，用于给数据赋值
     setUid:function (state,uid) {
@@ -27,6 +28,9 @@ const store = new Vuex.Store({
     },
     setClassNo:function (state, classNo) {
       state.classNo = classNo;
+    },
+    setDefault:function (state, defaultG) {
+      state.defaultG = defaultG;
     }
   },
   actions:{
@@ -49,6 +53,9 @@ const store = new Vuex.Store({
     },
     setClassNo:function (context,classNo) {
       context.commit("setClassNo",classNo);
+    },
+    setDefault:function (context,defaultG) {
+      context.commit("setDefault",defaultG);
     }
   }
 });

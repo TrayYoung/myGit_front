@@ -13,7 +13,8 @@
       <el-container>
         <el-aside width="250px" style="background-color: rgb(238, 241, 246);height: 85vh">
           <el-menu
-            default-active="/classAdministration">
+            id="elMenu"
+            :default-active="$store.state.defaultG">
             <navigation-item v-for="(menu,i) in adminMenus" :key="i" :item="menu"/>
             <el-menu-item style="font-size: 17px;" @click="exitSys">
               <i class="el-icon-switch-button"></i>
@@ -29,74 +30,6 @@
         </el-container>
       </el-container>
     </el-container>
-   <!-- <el-container class="container">
-      <el-header class="header">
-
-        <el-row>
-          <el-col :span="16" class="headerlogo">
-            <div class="grid-content bg-purple">
-
-              EmpMain
-            </div>
-          </el-col>
-          <el-col :span="8" class="rightsection">
-            <div class="grid-content bg-purple-light">
-              <span class="el-dropdown-link userinfo-inner">欢迎您，{{$store.state.username}}</span>
-            </div>
-          </el-col>
-        </el-row>
-      </el-header>
-      <el-container>
-        <el-aside class="aside">
-          &lt;!&ndash; 侧边栏导航  &ndash;&gt;
-         &lt;!&ndash; <el-menu
-            default-active="1"
-            class="el-menu-vertical-demo"
-            @open="handleOpen"
-            @close="handleClose"
-            background-color="#545c64"
-            text-color="#fff"
-            active-text-color="#ffd04b"
-          >
-            <el-menu-item index="1">
-              <template slot="title">
-                <i class="el-icon-document"></i>
-                <span>班级管理</span>
-              </template>
-            </el-menu-item>
-            <el-menu-item index="2">
-              <i class="el-icon-setting"></i>
-              <span slot="title">学生管理</span>
-            </el-menu-item>
-            <el-menu-item index="3">
-              <i class="el-icon-setting"></i>
-              <span slot="title">教师管理</span>
-            </el-menu-item>
-            <el-menu-item index="4">
-              <i class="el-icon-setting"></i>
-              <span slot="title">员工管理</span>
-            </el-menu-item>
-            <el-menu-item index="5">
-              <i class="el-icon-setting"></i>
-              <span slot="title">经理管理</span>
-            </el-menu-item>
-            <el-menu-item index="6">
-              <i class="el-icon-setting"></i>
-              <span slot="title">重置用户密码</span>
-            </el-menu-item>
-            <el-menu-item index="7">
-              <i class="el-icon-setting"></i>
-              <span slot="title">修改管理员密码</span>
-            </el-menu-item>
-            <el-menu-item index="8">
-              <i class="el-icon-setting"></i>
-              <span slot="title">退出登录</span>
-            </el-menu-item>
-          </el-menu>&ndash;&gt;
-        </el-aside>
-        <el-main class="main">Main</el-main>
-      </el-container>
-    </el-container>-->
   </div>
 </template>
 <script>
@@ -135,8 +68,7 @@
           newPass: '',
           checkPass: '',
         },
-        pagesize: 5,
-        curPage: 1,
+
         search: '',
         filter: 'all',
         showAddOrder: false
@@ -299,14 +231,29 @@
       }
     },
     methods: {
-      selectFirstPath:function(){
+      /*selectFirstPath:function(){
         this.firstPath=this.adminMenus[0].path;
-      },
+        //this.$router.push({path: this.firstPath});
+      },*/
       getMenu() {
+        //alert(this.$store.state.defaultG);
         var role = sessionStorage.getItem("role");
           axios.get('getMenu/' + role).then(res => {
           this.adminMenus = res.data;
           this.firstPath=res.data[0].path;
+           /* var MyComponent = Vue.extend({
+              template: '<el-menu-item style="font-size: 17px;" @click="exitSys">\n' +
+                '              <i class="el-icon-switch-button"></i>\n' +
+                '              <span slot="title">退出系统</span>\n' +
+                '            </el-menu-item>'
+            });
+            new myAppendTo().$mount().$appendTo('#elMenu');//appendTo*/
+          /*$("#elMenu").append("<el-menu-item style=\"font-size: 17px;\" @click=\"exitSys\">\n" +
+            "              <i class=\"el-icon-switch-button\"></i>\n" +
+            "              <span slot=\"title\">退出系统</span>\n" +
+            "            </el-menu-item>")*/
+          //$("#elMenu").attr('active',this.firstPath);
+          //this.$router.push({path: this.firstPath});
         })
       },
 
@@ -653,9 +600,11 @@
     },
     created() {
       //this.isLogin();
-      this.getMenu();
+
     },
     mounted() {
+      this.getMenu();
+      //this.selectFirstPath();
       if (sessionStorage.getItem("uid") === null){
         this.$message({
           type: 'error',
@@ -664,6 +613,9 @@
         sessionStorage.clear();
         this.$router.push({path: '/'})
       }
+    },
+    updated(){
+      //this.getMenu();
     },
     components: {
       "navigation-item": NavigationItem

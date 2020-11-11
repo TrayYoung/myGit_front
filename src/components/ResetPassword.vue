@@ -24,7 +24,8 @@
       <el-col :span="8"><div class="grid-content bg-purple-light"><span style="color: transparent">hh</span></div></el-col>
 
       <el-col :span="8"><div class="grid-content bg-purple">
-        <el-input v-model="formForSearch.queryEmpno"style="width: 230px" type="text" clearable @clear="resetEmpno"
+        <el-input v-model="formForSearch.queryEmpno"style="width: 230px" type="text" clearable
+                  @clear="resetEmpno" @keyup.enter.native="searchEmp" @keyup.delete.native="searchEmp"
                   placeholder="请输入员工工号" ></el-input>
         <el-button type="primary" icon="el-icon-search" @click="searchEmp">搜索</el-button>
       </div></el-col>

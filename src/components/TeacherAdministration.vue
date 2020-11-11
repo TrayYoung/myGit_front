@@ -5,7 +5,8 @@
     <el-row>
       <el-col :span="10"><div class="grid-content bg-purple">
 
-        <el-input v-model="formForSearch.queryTname" style="width: 230px" type="text" clearable placeholder="请输入教师姓名" @clear="setQueryTname"></el-input>
+        <el-input v-model="formForSearch.queryTname" style="width: 230px" type="text" clearable placeholder="请输入教师姓名"
+                  @clear="setQueryTname"  @keyup.enter.native="searchTeacher" @keyup.delete.native="searchTeacher"></el-input>
 
 
         <el-button type="primary" icon="el-icon-search" @click="searchTeacher" >搜索</el-button>

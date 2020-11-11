@@ -15,7 +15,8 @@
         </el-select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
         姓名：
-        <el-input v-model="formForSearch.queryEname" style="width: 180px" type="text" clearable placeholder="请输入员工姓名" @clear="setQueryEname"></el-input>
+        <el-input v-model="formForSearch.queryEname" style="width: 180px" type="text" clearable placeholder="请输入员工姓名"
+                  @clear="setQueryEname" @keyup.enter.native="searchEmp" @keyup.delete.native="searchEmp"></el-input>
 
 
         <el-button type="primary" icon="el-icon-search" @click="searchEmp">搜索</el-button>
